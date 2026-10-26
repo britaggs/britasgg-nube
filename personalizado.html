@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avatar 3D BRITASGG</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+    <script>
+        // ====================== PROTECCIÓN DE RUTA ======================
+        // Este código se ejecuta inmediatamente al cargar la página
+        (function protegerRuta() {
+            const user = JSON.parse(localStorage.getItem('brit_user') || 'null');
+            const token = localStorage.getItem('brit_token');
+
+            if (!user || !token) {
+                // Guardamos la página actual para redirigir después del login
+                sessionStorage.setItem('brit_redirect', window.location.href);
+
+                // Redirigimos al login
+                window.location.href = 'index.html?login=required';
+            }
+        })();
+
+        // ====================== TAILWIND CONFIG ======================
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#d41152",
+                        bgdark: "#181113",
+                        surface: "#221016"
+                    },
+                    fontFamily: { display: ["Inter"] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #d41152;
+            border: 2px solid #fff;
+        }
+
+        .zone {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="bg-bgdark text-white font-display min-h-screen">
+
+    <!-- HEADER -->
+    <header class="px-6 py-4 flex justify-between items-center border-b border-[#39282e]">
+        <div>
+            <h1 class="text-xl font-black">BRITASGG</h1>
+            <p class="text-[10px] tracking-widest text-gray-400">
+                EL VESTIR DEL DÍA A DÍA
+            </p>
+        </div>
+
+        <!-- Botones a la derecha -->
+        <div class="flex items-center gap-3">
+            <a href="index.html"
+                class="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[#39282e] hover:bg-[#2a1f24] transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-base">home</span>
+                Inicio
+            </a>
+
+            <!-- Indicador de sesión -->
+            <div id="authBtnWrap" class="flex items-center gap-2">
+                <div class="flex flex-col items-end">
+                    <span style="font-size:10px;color:#6b7280">Hola,</span>
+                    <span id="userNameHeader" style="font-size:13px;font-weight:800;color:#11b4d4">Usuario 👋</span>
+                </div>
+            </div>
+
+            <button onclick="cerrarSesion()"
+                class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#39282e] hover:bg-[#2a1f24] transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-base">logout</span>
+            </button>
+        </div>
+    </header>
+    <!-- MAIN -->
+    <main class="flex h-[calc(100vh-72px)]">
+
+        <!-- VISUALIZADOR -->
+        <section class="flex-1 flex items-center justify-center relative bg-gradient-to-br from-[#2d1b22] to-[#181113]">
+
+            <div class="relative h-[80%] w-[320px]" id="avatar-wrapper">
+
+                <!-- GUIAS -->
+                <div class="zone top-[28%] w-36 h-[2px] bg-primary">
+                    <span id="g-pecho" class="absolute right-[-46px] top-[-10px] text-xs bg-primary px-1 rounded">
+                        92 cm
+                    </span>
+                </div>
+
+                <div class="zone top-[38%] w-28 h-[2px] bg-primary/70">
+                    <span id="g-cintura" class="absolute left-[-46px] top-[-10px] text-xs bg-surface px-1 rounded">
+                        70 cm
+                    </span>
+                </div>
+
+                <div class="zone top-[56%] w-32 h-[2px] bg-primary/50">
+                    <span id="g-cadera" class="absolute right-[-46px] top-[-10px] text-xs bg-primary px-1 rounded">
+                        98 cm
+                    </span>
+                </div>
+            </div>
+
+            <!-- BOTONES DE VISTA -->
+            <div class="absolute bottom-6 flex gap-2">
+                <button data-view="front" class="view px-4 py-2 bg-primary rounded text-xs">
+                    Frente
+                </button>
+                <button data-view="side" class="view px-4 py-2 bg-surface rounded text-xs">
+                    Perfil
+                </button>
+                <button data-view="back" class="view px-4 py-2 bg-surface rounded text-xs">
+                    Espalda
+                </button>
+            </div>
+        </section>
+
+        <!-- CONTROLES -->
+        <aside class="w-[420px] p-6 bg-bgdark border-l border-[#39282e] space-y-6">
+
+            <h2 class="font-bold text-lg">Medidas Corporales</h2>
+
+            <div class="space-y-4">
+
+                <div>
+                    <label class="text-sm">Hombros</label>
+                    <input type="range" min="30" max="55" value="40" data-key="hombros" class="w-full">
+                </div>
+
+                <div>
+                    <label class="text-sm">Pecho</label>
+                    <input type="range" min="70" max="140" value="110" data-key="pecho" class="w-full">
+                </div>
+
+                <div>
+                    <label class="text-sm">Espalda</label>
+                    <input type="range" min="30" max="50" value="38" data-key="espalda" class="w-full">
+                </div>
+
+                <div>
+                    <label class="text-sm">Cintura</label>
+                    <input type="range" min="50" max="120" value="70" data-key="cintura" class="w-full">
+                </div>
+
+                <div>
+                    <label class="text-sm">Cadera</label>
+                    <input type="range" min="70" max="160" value="98" data-key="cadera" class="w-full">
+                </div>
+
+            </div>
+
+            <!-- SISTEMA DE PRENDAS -->
+            <div class="mt-8 pt-6 border-t border-[#39282e] hidden">
+                <h2 class="font-bold text-lg mb-4">Prendas de Vestir</h2>
+
+                <div class="space-y-3">
+                    <!-- Camiseta -->
+                    <div class="bg-surface rounded p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold">Camiseta</span>
+                            <button onclick="quitarPrenda('camiseta')" class="text-xs text-red-400 hover:text-red-300">
+                                Quitar
+                            </button>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="vestirPrenda('camiseta', 0x3b82f6)" class="flex-1 h-8 rounded"
+                                style="background: #3b82f6" title="Azul"></button>
+                            <button onclick="vestirPrenda('camiseta', 0xef4444)" class="flex-1 h-8 rounded"
+                                style="background: #ef4444" title="Rojo"></button>
+                            <button onclick="vestirPrenda('camiseta', 0xffffff)"
+                                class="flex-1 h-8 rounded border border-gray-600" style="background: #ffffff"
+                                title="Blanco"></button>
+                            <button onclick="vestirPrenda('camiseta', 0x000000)" class="flex-1 h-8 rounded"
+                                style="background: #000000" title="Negro"></button>
+                        </div>
+                    </div>
+
+                    <!-- Pantalón -->
+                    <div class="bg-surface rounded p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold">Pantalón</span>
+                            <button onclick="quitarPrenda('pantalon')" class="text-xs text-red-400 hover:text-red-300">
+                                Quitar
+                            </button>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="vestirPrenda('pantalon', 0x1e3a8a)" class="flex-1 h-8 rounded"
+                                style="background: #1e3a8a" title="Azul oscuro"></button>
+                            <button onclick="vestirPrenda('pantalon', 0x000000)" class="flex-1 h-8 rounded"
+                                style="background: #000000" title="Negro"></button>
+                            <button onclick="vestirPrenda('pantalon', 0x78716c)" class="flex-1 h-8 rounded"
+                                style="background: #78716c" title="Gris"></button>
+                            <button onclick="vestirPrenda('pantalon', 0x92400e)" class="flex-1 h-8 rounded"
+                                style="background: #92400e" title="Café"></button>
+                        </div>
+                    </div>
+
+                    <!-- Vestido -->
+                    <div class="bg-surface rounded p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold">Vestido</span>
+                            <button onclick="quitarPrenda('vestido')" class="text-xs text-red-400 hover:text-red-300">
+                                Quitar
+                            </button>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="vestirPrenda('vestido', 0xd41152)" class="flex-1 h-8 rounded"
+                                style="background: #d41152" title="Rosa BRITASGG"></button>
+                            <button onclick="vestirPrenda('vestido', 0x000000)" class="flex-1 h-8 rounded"
+                                style="background: #000000" title="Negro"></button>
+                            <button onclick="vestirPrenda('vestido', 0xdc2626)" class="flex-1 h-8 rounded"
+                                style="background: #dc2626" title="Rojo"></button>
+                            <button onclick="vestirPrenda('vestido', 0x1e40af)" class="flex-1 h-8 rounded"
+                                style="background: #1e40af" title="Azul"></button>
+                        </div>
+                    </div>
+
+                    <!-- Chaqueta -->
+                    <div class="bg-surface rounded p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-semibold">Chaqueta</span>
+                            <button onclick="quitarPrenda('chaqueta')" class="text-xs text-red-400 hover:text-red-300">
+                                Quitar
+                            </button>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="vestirPrenda('chaqueta', 0x374151)" class="flex-1 h-8 rounded"
+                                style="background: #374151" title="Gris oscuro"></button>
+                            <button onclick="vestirPrenda('chaqueta', 0x000000)" class="flex-1 h-8 rounded"
+                                style="background: #000000" title="Negro"></button>
+                            <button onclick="vestirPrenda('chaqueta', 0x1e3a8a)" class="flex-1 h-8 rounded"
+                                style="background: #1e3a8a" title="Azul"></button>
+                            <button onclick="vestirPrenda('chaqueta', 0x78350f)" class="flex-1 h-8 rounded"
+                                style="background: #78350f" title="Café"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- THREE.JS - FORMA MODERNA CON IMPORTMAP -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+        }
+    }
+    
+    </script>
+
+    <!-- SCRIPT PRINCIPAL - Cargar como módulo ES6 -->
+    <script type="module" src="js/main.js"></script>
+
+    <!-- ====================== FUNCIONES GLOBALES ====================== -->
+    <script>
+        // Mostrar nombre del usuario
+        document.addEventListener('DOMContentLoaded', function () {
+            const user = JSON.parse(localStorage.getItem('brit_user') || 'null');
+            const el = document.getElementById('userNameHeader');
+            if (el && user) {
+                const primerNombre = user.nombre ? user.nombre.split(' ')[0] : 'Usuario';
+                el.textContent = primerNombre + ' 👋';
+            }
+        });
+        // ====================== CERRAR SESIÓN ======================
+        function cerrarSesion() {
+            if (confirm("¿Estás seguro de cerrar sesión?")) {
+                localStorage.removeItem('brit_token');
+                localStorage.removeItem('brit_user');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catálogo — BRITASGG</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        // ── Protección de ruta ─────────────────────────────────────
+        (function protegerRuta() {
+            const user = JSON.parse(localStorage.getItem('brit_user') || 'null');
+            const token = localStorage.getItem('brit_token');
+            if (!user || !token) {
+                // Guardar la página que intentaba visitar
+                sessionStorage.setItem('brit_redirect', window.location.href);
+                // Redirigir al inicio con mensaje
+                window.location.href = 'index.html?login=required';
+            }
+        })();
+        tailwind.config = {
+            darkMode: "class",
+            theme: { extend: { colors: { primary: "#11b4d4", "background-light": "#f6f8f8", "background-dark": "#101f22" }, fontFamily: { display: ["Work Sans", "sans-serif"] } } }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .card-hover {
+            transition: all 0.2s;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(17, 180, 212, .15);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-[#111718] dark:text-white font-display min-h-screen">
+
+    <!-- Header -->
+    <div
+        class="w-full flex justify-center sticky top-0 z-50 bg-white/90 dark:bg-[#101f22]/90 backdrop-blur-md border-b border-[#f0f4f4] dark:border-[#1e3a3f]">
+        <div class="flex max-w-[1200px] flex-1 flex-col">
+            <header class="flex items-center justify-between px-4 py-3 md:px-10">
+                <div class="flex items-center gap-3">
+                    <a href="index.html" class="flex items-center gap-3 no-underline">
+                        <span class="material-symbols-outlined text-3xl text-primary">checkroom</span>
+                        <h2 class="text-lg font-black uppercase hidden sm:block dark:text-white">BRITASGG</h2>
+                    </a>
+                </div>
+                <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <a href="index.html" class="hover:text-primary transition-colors">Inicio</a>
+                    <a href="analisis-color.html" class="hover:text-primary transition-colors">Colorimetría</a>
+                    <a href="explorador-disenos.html" class="hover:text-primary transition-colors">Explorar</a>
+                    <a href="personalizado.html" class="hover:text-primary transition-colors flex items-center gap-1">
+                        <span class="material-symbols-outlined text-base">view_in_ar</span> Avatar 3D
+                    </a>
+                </nav>
+                <div id="userInfo" class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400"></div>
+            </header>
+        </div>
+    </div>
+
+    <!-- Hero catálogo -->
+    <div class="bg-gradient-to-r from-primary/10 to-transparent dark:from-primary/5 border-b border-primary/10">
+        <div class="max-w-[1200px] mx-auto px-6 py-10 flex items-center justify-between flex-wrap gap-4">
+            <div>
+                <h1 class="text-3xl font-black dark:text-white">Catálogo de Diseños</h1>
+                <p class="text-gray-500 dark:text-gray-400 mt-1">Selecciona cualquier diseño para probarlo en tu avatar
+                    3D</p>
+            </div>
+            <a href="personalizado.html"
+                class="flex items-center gap-2 bg-primary text-[#111718] font-bold px-5 py-2.5 rounded-xl hover:bg-opacity-90 transition-opacity">
+                <span class="material-symbols-outlined">view_in_ar</span> Ir al Avatar 3D
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="max-w-[1200px] mx-auto px-6 py-5">
+        <div class="flex flex-wrap gap-3 items-center">
+            <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Filtrar:</span>
+            <div class="flex gap-2 flex-wrap" id="filtros">
+                <button data-tipo=""
+                    class="filtro-btn px-4 py-1.5 rounded-full text-sm font-medium bg-primary text-[#111718] transition-all">Todos</button>
+                <button data-tipo="vestido"
+                    class="filtro-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-all">Vestidos</button>
+                <button data-tipo="blusa"
+                    class="filtro-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-all">Blusas</button>
+                <button data-tipo="pantalon"
+                    class="filtro-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-all">Pantalones</button>
+                <button data-tipo="chaqueta"
+                    class="filtro-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-all">Chaquetas</button>
+            </div>
+            <div class="ml-auto">
+                <input id="buscar" type="search" placeholder="Buscar diseño..."
+                    class="px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 dark:bg-[#1a2c30] dark:text-white text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none w-48" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de diseños -->
+    <div class="max-w-[1200px] mx-auto px-6 pb-16">
+        <div id="catalogoGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <!-- Cargando... -->
+            <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+                <span class="material-symbols-outlined text-5xl animate-spin mb-3">autorenew</span>
+                <p>Cargando diseños...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast"
+        class="fixed bottom-6 right-6 bg-[#111718] text-white px-5 py-3 rounded-xl shadow-2xl text-sm font-medium transform translate-y-20 transition-all duration-300 opacity-0 z-50 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-base">check_circle</span>
+        <span id="toastMsg"></span>
+    </div>
+
+    <script>
+        const API = 'http://localhost:3001/api';
+        let todosLosDisenos = [];
+        let filtroActivo = '';
+
+        function getToken() { return localStorage.getItem('brit_token'); }
+        function getUser() { return JSON.parse(localStorage.getItem('brit_user') || 'null'); }
+
+        // Actualizar info de usuario en header
+        function initHeader() {
+            const user = getUser();
+            const el = document.getElementById('userInfo');
+            if (user) {
+                el.innerHTML = `<span class="hidden md:block">Hola, <strong>${user.nombre.split(' ')[0]}</strong></span>
+      <a href="personalizado.html" class="bg-primary text-[#111718] font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 hover:bg-opacity-90">
+        <span class="material-symbols-outlined text-sm">view_in_ar</span> Mi Avatar
+      </a>`;
+            } else {
+                el.innerHTML = `<a href="index.html" class="text-primary font-medium text-sm hover:underline">Iniciar sesión</a>`;
+            }
+        }
+
+        // Cargar diseños
+        async function cargarDisenos(tipo = '') {
+            const grid = document.getElementById('catalogoGrid');
+            grid.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+    <span class="material-symbols-outlined text-5xl animate-spin mb-3">autorenew</span><p>Cargando...</p></div>`;
+            try {
+                const url = tipo ? `${API}/modelos?tipo=${tipo}` : `${API}/modelos`;
+                const res = await fetch(url);
+                const data = await res.json();
+                todosLosDisenos = data.modelos || [];
+                renderGrid(todosLosDisenos);
+            } catch {
+                // Fallback con datos locales
+                todosLosDisenos = MODELOS_LOCAL.filter(m => !tipo || m.tipo === tipo);
+                renderGrid(todosLosDisenos);
+            }
+        }
+
+        function renderGrid(modelos) {
+            const grid = document.getElementById('catalogoGrid');
+            if (!modelos.length) {
+                grid.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+      <span class="material-symbols-outlined text-5xl mb-3">search_off</span><p>No se encontraron diseños</p></div>`;
+                return;
+            }
+            grid.innerHTML = modelos.map(m => {
+                const colores = Array.isArray(m.colores_hex) ? m.colores_hex : JSON.parse(m.colores_hex || '[]');
+                const icono = { vestido: 'checkroom', camiseta: 'dry_cleaning', pantalon: 'straighten', chaqueta: 'style', blusa: 'checkroom', falda: 'checkroom' }[m.tipo] || 'checkroom';
+                return `
+    <div class="card-hover bg-white dark:bg-[#15272b] border border-[#dbe4e6] dark:border-[#2a454b] rounded-2xl overflow-hidden cursor-pointer fade-in" onclick="seleccionarDiseno(${JSON.stringify(m).replace(/"/g, '&quot;')})">
+      <div class="aspect-[3/4] bg-gradient-to-br from-primary/10 to-transparent flex flex-col items-center justify-center relative">
+        <span class="material-symbols-outlined text-6xl text-primary/40">${icono}</span>
+        <span class="absolute top-2 right-2 text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full capitalize">${m.tipo}</span>
+      </div>
+      <div class="p-3">
+        <p class="font-semibold text-sm dark:text-white truncate">${m.nombre}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">${m.descripcion || ''}</p>
+        <div class="flex gap-1.5 mt-2">
+          ${colores.slice(0, 4).map(c => `<div class="w-4 h-4 rounded-full border border-gray-200 dark:border-gray-600" style="background:${c}" title="${c}"></div>`).join('')}
+        </div>
+        <button class="mt-3 w-full py-1.5 text-xs font-bold bg-primary/10 hover:bg-primary text-primary hover:text-[#111718] rounded-lg transition-all" onclick="event.stopPropagation();seleccionarDiseno(${JSON.stringify(m).replace(/"/g, '&quot;')})">
+          Probar en Avatar →
+        </button>
+      </div>
+    </div>`;
+            }).join('');
+        }
+
+        function seleccionarDiseno(modelo) {
+            // Guardar en sessionStorage para que personalizado.html lo cargue
+            sessionStorage.setItem('brit_modelo_seleccionado', JSON.stringify(modelo));
+            showToast(`"${modelo.nombre}" listo para el avatar`);
+            setTimeout(() => window.location.href = 'personalizado.html', 800);
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            t.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 2200);
+        }
+
+        // Filtros
+        document.querySelectorAll('.filtro-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filtro-btn').forEach(b => {
+                    b.className = 'filtro-btn px-4 py-1.5 rounded-full text-sm font-medium border border-gray-300 dark:border-gray-600 hover:border-primary hover:text-primary transition-all';
+                });
+                btn.className = 'filtro-btn px-4 py-1.5 rounded-full text-sm font-medium bg-primary text-[#111718] transition-all';
+                filtroActivo = btn.dataset.tipo;
+                cargarDisenos(filtroActivo);
+            });
+        });
+
+        // Búsqueda
+        document.getElementById('buscar').addEventListener('input', e => {
+            const q = e.target.value.toLowerCase();
+            const filtrados = todosLosDisenos.filter(m =>
+                m.nombre.toLowerCase().includes(q) || (m.descripcion || '').toLowerCase().includes(q) || m.tipo.includes(q)
+            );
+            renderGrid(filtrados);
+        });
+
+        // Datos locales de respaldo
+        const MODELOS_LOCAL = [
+            { id: 1, nombre: 'Vestido Elegante 1', archivo_glb: 'models/prendas/vestido-1.glb', tipo: 'vestido', colores_hex: ['#d41152', '#000000', '#8b5cf6'], descripcion: 'Vestido elegante de noche' },
+            { id: 2, nombre: 'Vestido Clásico 3', archivo_glb: 'models/prendas/vestido-3.glb', tipo: 'vestido', colores_hex: ['#dc2626', '#1e3a8a', '#ffffff'], descripcion: 'Vestido clásico de día' },
+            { id: 3, nombre: 'Vestido Floral 4', archivo_glb: 'models/prendas/vestido-4.glb', tipo: 'vestido', colores_hex: ['#f472b6', '#34d399', '#fbbf24'], descripcion: 'Vestido floral primavera' },
+            { id: 4, nombre: 'Vestido Midi 5', archivo_glb: 'models/prendas/vestido-5.glb', tipo: 'vestido', colores_hex: ['#7c3aed', '#0891b2', '#059669'], descripcion: 'Vestido midi elegante' },
+            { id: 5, nombre: 'Vestido Noche 6', archivo_glb: 'models/prendas/vestido-6.glb', tipo: 'vestido', colores_hex: ['#000000', '#1e1b4b', '#7f1d1d'], descripcion: 'Vestido de noche sofisticado' },
+            { id: 6, nombre: 'Vestido Floral Blanco', archivo_glb: 'models/prendas/white_floral_dress_blooming_ele...', tipo: 'vestido', colores_hex: ['#ffffff', '#f9a8d4'], descripcion: 'Vestido floral blanco' },
+            { id: 7, nombre: 'Blusa Casual', archivo_glb: 'models/prendas/blusa.glb', tipo: 'blusa', colores_hex: ['#3b82f6', '#ef4444', '#ffffff'], descripcion: 'Blusa casual cómoda' },
+            { id: 8, nombre: 'Pantalón Clásico', archivo_glb: 'models/prendas/pantalon.glb', tipo: 'pantalon', colores_hex: ['#1e3a8a', '#000000', '#78716c'], descripcion: 'Pantalón clásico' },
+            { id: 9, nombre: 'Vestido Ejecutivo', archivo_glb: 'models/prendas/dress.glb', tipo: 'vestido', colores_hex: ['#1e3a8a', '#374151', '#000000'], descripcion: 'Vestido formal para oficina' },
+            { id: 10, nombre: 'Conjunto Fiesta', archivo_glb: 'models/prendas/party_dress.glb', tipo: 'vestido', colores_hex: ['#d41152', '#7c3aed', '#000000'], descripcion: 'Conjunto de fiesta' },
+
+        ];
+
+        // Init
+        window.addEventListener('DOMContentLoaded', () => {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.classList.add(theme);
+            initHeader();
+            cargarDisenos();
+        });
+    </script>
+</body>
+
+</html>

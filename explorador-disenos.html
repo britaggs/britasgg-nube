@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Explorador de Diseños BRITASGG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        // Mostrar usuario activo
+        document.addEventListener('DOMContentLoaded', function () {
+            const user = JSON.parse(localStorage.getItem('brit_user') || 'null');
+            const wrap = document.getElementById('authBtnWrap');
+            if (!wrap) return;
+
+            if (user) {
+                const primerNombre = user.nombre ? user.nombre.split(' ')[0] : 'Usuario';
+                wrap.innerHTML = `
+            <div class="flex items-center gap-2">
+                <div class="flex flex-col items-end">
+                    <span style="font-size:10px;color:#6b7280">Hola,</span>
+                    <span style="font-size:13px;font-weight:800;color:#11b4d4">${primerNombre} 👋</span>
+                </div>
+                <button onclick="logoutPage()" title="Cerrar sesión"
+                    class="flex items-center gap-1 cursor-pointer rounded-lg h-9 px-3 border border-gray-300 dark:border-gray-600 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <span class="material-symbols-outlined" style="font-size:16px">logout</span>
+                </button>
+            </div>`;
+            } else {
+                wrap.innerHTML = `
+            <a href="index.html?login=required"
+                class="flex items-center gap-2 rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined" style="font-size:16px">person</span>
+                Ingresar
+            </a>`;
+            }
+        });
+
+        function logoutPage() {
+            localStorage.removeItem('brit_token');
+            localStorage.removeItem('brit_user');
+            window.location.href = 'index.html';
+        }
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11b4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0) translateY(100px);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-bounce-in {
+            animation: bounce-in 0.6s ease-out;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-[#111718] dark:text-white font-display">
+
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Header -->
+        <header
+            class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e5e8e8] dark:border-b-[#2a3b3e] bg-white dark:bg-[#15262a] px-4 py-3 md:px-10">
+            <div class="flex items-center gap-4 md:gap-8">
+                <a href="index.html"
+                    class="flex items-center gap-3 text-[#111718] dark:text-white hover:opacity-80 transition-opacity">
+                    <div class="size-9 flex items-center justify-center text-primary bg-primary/5 rounded-lg">
+                        <span class="material-symbols-outlined text-3xl">checkroom</span>
+                    </div>
+                    <div class="hidden md:flex flex-col justify-center">
+                        <h2 class="text-xl font-black leading-none tracking-tight">BRITASGG</h2>
+                        <span
+                            class="text-[10px] font-bold text-[#618389] dark:text-[#a0b3b6] uppercase tracking-wider">el
+                            vestir del día a día</span>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="index.html">Inicio</a>
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="index.html#servicios">Servicios</a>
+                    <a class="text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="analisis-color.html">Análisis de Color</a>
+                </div>
+            </div>
+            <div class="flex flex-1 justify-end gap-4 md:gap-8">
+                <label class="hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
+                    <div
+                        class="flex w-full flex-1 items-stretch rounded-lg h-full border border-[#e5e8e8] dark:border-[#2a3b3e] bg-white dark:bg-[#1a2c30]">
+                        <div class="text-[#618389] flex items-center justify-center pl-3 rounded-l-lg">
+                            <span class="material-symbols-outlined text-[20px]">search</span>
+                        </div>
+                        <input id="searchInput" onkeyup="filterDesigns()"
+                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-[#618389] px-3 text-base font-normal leading-normal dark:text-white"
+                            placeholder="Buscar diseños..." />
+                    </div>
+                </label>
+                <button onclick="toggleTheme()"
+                    class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <span id="themeIcon" class="material-symbols-outlined text-xl">dark_mode</span>
+                </button>
+
+                <!-- Indicador de sesión -->
+                <div id="authBtnWrap"></div>
+            </div>
+        </header>
+
+        <main class="flex-1 w-full max-w-[1440px] mx-auto flex flex-col">
+            <!-- Hero Section -->
+            <div class="px-4 py-8 md:px-10 lg:px-20 lg:py-12">
+                <div class="@container">
+                    <div class="flex flex-col-reverse gap-8 lg:flex-row items-center">
+                        <div class="flex flex-col gap-6 flex-1 text-center lg:text-left items-center lg:items-start">
+                            <div class="flex flex-col gap-4">
+                                <h1
+                                    class="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em]">
+                                    Encuentra el Estilo <span class="text-primary">Perfecto</span> para Ti
+                                </h1>
+                                <h2
+                                    class="text-base md:text-lg text-[#618389] dark:text-[#a0b3b6] font-normal leading-relaxed max-w-2xl">
+                                    Explora nuestra colección curada y selecciona tu tipo de cuerpo para ver
+                                    recomendaciones personalizadas de nuestro taller de confección.
+                                </h2>
+                            </div>
+                            <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                                <button onclick="openBodyTypeModal()"
+                                    class="flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-[#111718] text-base font-bold hover:bg-[#0ea5c2] transition-colors shadow-lg shadow-primary/20">
+                                    <span class="material-symbols-outlined mr-2 text-[20px]">accessibility_new</span>
+                                    <span>Descubre tu Tipo de Cuerpo</span>
+                                </button>
+                                <button onclick="openVisagismoModal()"
+                                    class="flex items-center justify-center rounded-lg h-12 px-6 bg-transparent border border-[#e5e8e8] dark:border-[#2a3b3e] text-[#111718] dark:text-white text-base font-bold hover:bg-[#f0f4f4] dark:hover:bg-[#1a2c30] transition-colors">
+                                    <span class="material-symbols-outlined mr-2 text-[20px]">face</span>
+                                    <span>Visagismo</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- LADO DERECHO - TIPOS DE ROSTRO -->
+                        <div class="w-full lg:w-1/2 grid grid-cols-2 gap-4">
+                            <!-- Ovalado -->
+                            <div
+                                class="bg-white dark:bg-[#15262a] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all">
+                                <img src="https://images.unsplash.com/photo-1546961329-78bef0414d7c?w=400"
+                                    class="w-full h-40 object-cover" alt="Rostro Ovalado">
+                                <div class="p-3">
+                                    <p class="font-semibold text-sm">Ovalado</p>
+                                    <p class="text-xs text-[#618389]">Versátil • Casi todos los estilos te favorecen</p>
+                                </div>
+                            </div>
+
+                            <!-- Cuadrado -->
+                            <div
+                                class="bg-white dark:bg-[#15262a] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all">
+                                <img src="https://i.pinimg.com/originals/fb/87/f1/fb87f13dfa1c11f648a1a248a97b3a77.jpg"
+                                    class="w-full h-40 object-cover" alt="Rostro Cuadrado">
+                                <div class="p-3">
+                                    <p class="font-semibold text-sm">Cuadrado</p>
+                                    <p class="text-xs text-[#618389]">Suaviza ángulos con capas y escotes en V</p>
+                                </div>
+                            </div>
+
+                            <!-- Redondo -->
+                            <div
+                                class="bg-white dark:bg-[#15262a] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all">
+                                <img src="https://cdn-0.chibichai.com/wp-content/uploads/2019/09/rostro-redondo-cara-redonda-selena-gomez-300x300.jpg"
+                                    class="w-full h-40 object-cover" alt="Rostro Redondo">
+                                <div class="p-3">
+                                    <p class="font-semibold text-sm">Redondo</p>
+                                    <p class="text-xs text-[#618389]">Alarga con escotes en V y cabello en capas</p>
+                                </div>
+                            </div>
+
+                            <!-- Triangular -->
+                            <div
+                                class="bg-white dark:bg-[#15262a] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all">
+                                <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400"
+                                    class="w-full h-40 object-cover" alt="Rostro Triangular">
+                                <div class="p-3">
+                                    <p class="font-semibold text-sm">Triangular</p>
+                                    <p class="text-xs text-[#618389]">Añade volumen en la parte inferior</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div id="filterSection"
+                class="sticky top-[65px] z-40 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-[#e5e8e8] dark:border-[#2a3b3e] py-4 px-4 md:px-10 overflow-x-auto no-scrollbar">
+                <div class="flex gap-3 min-w-max">
+                    <button onclick="filterByBodyType('all')"
+                        class="filter-btn flex h-10 items-center justify-center gap-x-2 rounded-full bg-primary px-6 shadow-md shadow-primary/20 transition-transform active:scale-95">
+                        <span class="text-[#111718] text-sm font-bold">Todos</span>
+                    </button>
+                    <button onclick="filterByBodyType('hourglass')"
+                        class="filter-btn group flex h-10 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#1a2c30] border border-[#e5e8e8] dark:border-[#2a3b3e] px-6 hover:border-primary/50 dark:hover:border-primary/50 transition-all active:scale-95">
+                        <span
+                            class="text-[#111718] dark:text-gray-200 text-sm font-medium group-hover:text-primary transition-colors">Reloj
+                            de Arena</span>
+                    </button>
+                    <button onclick="filterByBodyType('pear')"
+                        class="filter-btn group flex h-10 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#1a2c30] border border-[#e5e8e8] dark:border-[#2a3b3e] px-6 hover:border-primary/50 dark:hover:border-primary/50 transition-all active:scale-95">
+                        <span
+                            class="text-[#111718] dark:text-gray-200 text-sm font-medium group-hover:text-primary transition-colors">Triángulo
+                            / Pera</span>
+                    </button>
+                    <button onclick="filterByBodyType('inverted')"
+                        class="filter-btn group flex h-10 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#1a2c30] border border-[#e5e8e8] dark:border-[#2a3b3e] px-6 hover:border-primary/50 dark:hover:border-primary/50 transition-all active:scale-95">
+                        <span
+                            class="text-[#111718] dark:text-gray-200 text-sm font-medium group-hover:text-primary transition-colors">Triángulo
+                            Invertido</span>
+                    </button>
+                    <button onclick="filterByBodyType('rectangle')"
+                        class="filter-btn group flex h-10 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#1a2c30] border border-[#e5e8e8] dark:border-[#2a3b3e] px-6 hover:border-primary/50 dark:hover:border-primary/50 transition-all active:scale-95">
+                        <span
+                            class="text-[#111718] dark:text-gray-200 text-sm font-medium group-hover:text-primary transition-colors">Rectangular</span>
+                    </button>
+                    <button onclick="filterByBodyType('apple')"
+                        class="filter-btn group flex h-10 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-[#1a2c30] border border-[#e5e8e8] dark:border-[#2a3b3e] px-6 hover:border-primary/50 dark:hover:border-primary/50 transition-all active:scale-95">
+                        <span
+                            class="text-[#111718] dark:text-gray-200 text-sm font-medium group-hover:text-primary transition-colors">Ovalado
+                            / Manzana</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="px-4 py-8 md:px-10 lg:px-20">
+                <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Products will be inserted here by JavaScript -->
+                </div>
+                <div id="noResults" class="hidden text-center py-20">
+                    <span
+                        class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-4">search_off</span>
+                    <p class="text-xl font-bold text-gray-400">No se encontraron diseños</p>
+                    <p class="text-sm text-gray-400 mt-2">Intenta con otro filtro o búsqueda</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Floating CTA Button -->
+        <div class="fixed bottom-6 right-6 z-50 animate-bounce-in">
+            <button onclick="openModal()"
+                class="flex items-center gap-3 bg-primary text-[#111718] px-6 py-4 rounded-full shadow-xl hover:bg-[#0ea5c2] transition-all hover:scale-105 transform duration-200">
+                <span class="material-symbols-outlined">calendar_month</span>
+                <span class="font-bold text-base">Reservar Cita</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Body Type Modal (sin cambios) -->
+    <div id="bodyTypeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[100] p-4">
+        <div
+            class="bg-white dark:bg-[#15262a] rounded-2xl max-w-[800px] w-full p-8 shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold dark:text-white">Descubre tu Tipo de Cuerpo</h3>
+                <button onclick="closeBodyTypeModal()"
+                    class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border border-[#e5e8e8] dark:border-[#2a3b3e] rounded-xl p-6 hover:border-primary transition-colors cursor-pointer"
+                    onclick="selectBodyType('hourglass')">
+                    <h4 class="text-lg font-bold mb-2">⏳ Reloj de Arena</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Hombros y caderas alineados, cintura definida
+                    </p>
+                </div>
+                <div class="border border-[#e5e8e8] dark:border-[#2a3b3e] rounded-xl p-6 hover:border-primary transition-colors cursor-pointer"
+                    onclick="selectBodyType('pear')">
+                    <h4 class="text-lg font-bold mb-2">🍐 Pera / Triángulo</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Caderas más anchas que hombros</p>
+                </div>
+                <div class="border border-[#e5e8e8] dark:border-[#2a3b3e] rounded-xl p-6 hover:border-primary transition-colors cursor-pointer"
+                    onclick="selectBodyType('inverted')">
+                    <h4 class="text-lg font-bold mb-2">🔺 Triángulo Invertido</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Hombros más anchos que caderas</p>
+                </div>
+                <div class="border border-[#e5e8e8] dark:border-[#2a3b3e] rounded-xl p-6 hover:border-primary transition-colors cursor-pointer"
+                    onclick="selectBodyType('rectangle')">
+                    <h4 class="text-lg font-bold mb-2">📏 Rectangular</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Hombros, cintura y caderas alineados</p>
+                </div>
+                <div class="border border-[#e5e8e8] dark:border-[#2a3b3e] rounded-xl p-6 hover:border-primary transition-colors cursor-pointer"
+                    onclick="selectBodyType('apple')">
+                    <h4 class="text-lg font-bold mb-2">🍎 Manzana / Ovalado</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Peso concentrado en el centro del cuerpo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VISAGISMO MODAL - Versión mejorada con fotos reales de frutas -->
+    <div id="visagismoModal"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[110] p-4">
+        <div
+            class="bg-white dark:bg-[#15262a] rounded-3xl max-w-2xl w-full p-8 shadow-2xl fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold dark:text-white">Visagismo · Armonía Facial</h3>
+                <button onclick="closeVisagismoModal()"
+                    class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+
+            <p class="text-[#618389] dark:text-[#a0b3b6] mb-8 text-center">Elige la fruta que mejor representa la forma
+                de tu rostro</p>
+
+            <div class="grid grid-cols-2 gap-6" id="faceFruitsGrid">
+                <!-- Se genera con JavaScript -->
+            </div>
+
+            <!-- Resultado detallado (con todos los datos del CSV) -->
+            <div id="visagismoResult" class="hidden mt-10 pt-8 border-t border-[#e5e8e8] dark:border-[#2a3b3e]">
+                <div class="flex items-center gap-4 mb-6">
+                    <img id="fruitImage" src="" class="w-16 h-16 object-cover rounded-2xl shadow-md" alt="">
+                    <div>
+                        <h4 id="faceTypeTitle" class="text-2xl font-bold"></h4>
+                        <p id="faceSubtitle" class="text-[#618389]"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Columna izquierda -->
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">content_cut</span>
+                            <div>
+                                <p class="font-semibold text-sm uppercase tracking-widest text-primary">Corte de cabello
+                                </p>
+                                <p id="corteText" class="text-sm"></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">face_retouching_natural</span>
+                            <div>
+                                <p class="font-semibold text-sm uppercase tracking-widest text-primary">Maquillaje</p>
+                                <p id="maquillajeText" class="text-sm"></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">checkroom</span>
+                            <div>
+                                <p class="font-semibold text-sm uppercase tracking-widest text-primary">Escotes
+                                    recomendados</p>
+                                <p id="escotesText" class="text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Columna derecha (accesorios) -->
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">visibility</span>
+                            <div>
+                                <p class="font-semibold text-sm uppercase tracking-widest text-primary">Gafas</p>
+                                <p id="gafasText" class="text-sm"></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">earbuds</span>
+                            <div>
+                                <p class="font-semibold text-sm uppercase tracking-widest text-primary">Aretes</p>
+                                <p id="aretesText" class="text-sm"></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">shopping_bag</span>
+                            <div>
+                                <p class="font-semibold text-sm uppercase tracking-widest text-primary">Bolsos</p>
+                                <p id="bolsosText" class="text-sm"></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">footprint</span>
+                            <div>
+                                <p class="font-semibold text-sm uppercase tracking-widest text-primary">Zapatos</p>
+                                <p id="zapatosText" class="text-sm"></p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">watch</span>
+                            <div>
+                                <p class="font-semibold text-sm uppercase tracking-widest text-primary">Reloj</p>
+                                <p id="relojText" class="text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment Modal - CORREGIDO -->
+    <div id="appointmentModal"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[100] p-4">
+        <div class="bg-white dark:bg-[#15262a] rounded-2xl max-w-[500px] w-full p-8 shadow-2xl fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold dark:text-white">Reservar Cita</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+
+            <form>
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Nombre completo</label>
+                        <input id="nombre" type="text" required
+                            class="w-full px-4 py-3 rounded-lg border border-[#e5e8e8] dark:border-[#2a3b3e] dark:bg-[#1a2c30] dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Teléfono / WhatsApp</label>
+                        <input id="telefono" type="tel" required
+                            class="w-full px-4 py-3 rounded-lg border border-[#e5e8e8] dark:border-[#2a3b3e] dark:bg-[#1a2c30] dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Fecha Preferida</label>
+                        <input id="fecha" type="date" required
+                            class="w-full px-4 py-3 rounded-lg border border-[#e5e8e8] dark:border-[#2a3b3e] dark:bg-[#1a2c30] dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none">
+                    </div>
+
+                    <button onclick="confirmarCita(event)" type="button"
+                        class="w-full py-3 bg-primary text-[#111718] font-bold rounded-lg hover:bg-[#0ea5c2] transition-colors mt-4">
+                        Confirmar Cita
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+            // ── Protección de ruta ─────────────────────────────────────
+            (function protegerRuta() {
+                const user = JSON.parse(localStorage.getItem('brit_user') || 'null');
+                const token = localStorage.getItem('brit_token');
+                if (!user || !token) {
+                    // Guardar la página que intentaba visitar
+                    sessionStorage.setItem('brit_redirect', window.location.href);
+                    // Redirigir al inicio con mensaje
+                    window.location.href = 'index.html?login=required';
+                }
+            })();
+        // ==================== VISAGISMO DATA (basado en tu CSV tipo-corte-4.csv) ====================
+        const visagismoData = {
+            cuadrado: {
+                name: "Cuadrado",
+                subtitle: "Líneas rectas, mandíbula marcada y ángulos fuertes",
+                image: "https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=600",
+                corte: "Capas suaves y onduladas que suavicen los ángulos de la mandíbula y frente. Flequillo lateral suave o cortinas (curtain bangs) para romper la línea recta de la frente. Recomendado: capas largas, waves suaves y volumen en la parte superior. Evitar cortes rectos a la altura de la mandíbula o bob recto.",
+                maquillaje: "Contorno suave en las mandíbulas y sienes para redondear el rostro. Rubor en diagonal ascendente (de pómulos hacia sienes) para alargar visualmente. Iluminador en el centro de la frente y barbilla para crear suavidad. Evitar contornos muy marcados o líneas horizontales.",
+                escotes: "Escotes en V (suave o profundo) — los más favorecedores. Escotes redondeados suaves y escotes corazón. Evitar escotes cuadrados o rectos.",
+                gafas: "Formas redondeadas, ovaladas o con bordes suaves. Gafas tipo cat-eye suave o redondas grandes. Evitar gafas cuadradas o con ángulos rectos marcados.",
+                aretes: "Aretes largos, colgantes y con movimiento (curvos o fluidos). Formas redondas, lágrimas o circulares. Evitar aretes cuadrados, geométricos o muy angulares.",
+                bolsos: "Formas redondeadas, suaves o con curvas (bucket bag, tote redondeado). Evitar bolsos rígidos con formas cuadradas o rectangulares.",
+                zapatos: "Punta redonda o ligeramente puntiaguda con curvas suaves. Tacones con forma redondeada o strap delicado. Evitar puntera cuadrada o formas muy geométricas.",
+                reloj: "Esfera redonda o ovalada. Correa delgada y delicada (evitar correas anchas y rígidas). Collares largos o con formas curvas que alarguen el cuello."
+            },
+            redondo: {
+                name: "Redondo",
+                subtitle: "Pómulos llenos, contornos suaves",
+                image: "https://images.unsplash.com/photo-1547514701-42782101795e?w=600",
+                corte: "Cortes en capas largas, flequillo lateral, volumen arriba",
+                maquillaje: "Contorno para alargar, rubor vertical",
+                escotes: "Escotes en V profundos",
+                gafas: "Rectangulares o angulares",
+                aretes: "Largos y verticales",
+                bolsos: "Rectangulares o estructurados",
+                zapatos: "De punta fina o tacón alto",
+                reloj: "Caja rectangular o cuadrada"
+            },
+            triangular: {
+                name: "Triangular",
+                subtitle: "Frente amplia, mandíbula estrecha",
+                image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=600",
+                corte: "Cortes con volumen en la parte inferior, bob largo",
+                maquillaje: "Iluminador en mandíbula, rubor en mejillas",
+                escotes: "Escotes barco o redondeados",
+                gafas: "Ovaladas o redondeadas",
+                aretes: "Cortos y anchos",
+                bolsos: "Bolsos pequeños y redondeados",
+                zapatos: "Zapatos con punta redonda",
+                reloj: "Esfera ovalada o redonda"
+            },
+            ovalado: {
+                name: "Ovalado",
+                subtitle: "Equilibrado, proporciones armónicas",
+                image: "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600",
+                corte: "Casi todos los estilos, favorecen capas y flequillo",
+                maquillaje: "Maquillaje equilibrado, rubor en mejillas",
+                escotes: "Escotes variados (V, redondo, cuadrado)",
+                gafas: "Todos los estilos, especialmente aviador",
+                aretes: "Todos los estilos, depende del look",
+                bolsos: "Versátiles, cualquier forma",
+                zapatos: "Versátiles, cualquier estilo",
+                reloj: "Versátil, cualquier diseño"
+            }
+        };
+
+        // Renderizar frutas con fotos reales (más profesional y elegante)
+        function renderFruits() {
+            const container = document.getElementById('faceFruitsGrid');
+            container.innerHTML = '';
+
+            Object.keys(visagismoData).forEach(key => {
+                const data = visagismoData[key];
+                const div = document.createElement('div');
+                div.className = "cursor-pointer group rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-transparent hover:border-primary/30";
+                div.innerHTML = `
+                    <img src="${data.image}" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+                    <div class="p-4 bg-white dark:bg-[#15262a]">
+                        <h4 class="font-bold text-lg">${data.name}</h4>
+                        <p class="text-xs text-[#618389] dark:text-[#a0b3b6]">${data.subtitle}</p>
+                    </div>
+                `;
+                div.onclick = () => showVisagismoResult(key);
+                container.appendChild(div);
+            });
+        }
+
+        function showVisagismoResult(key) {
+            const data = visagismoData[key];
+            const resultDiv = document.getElementById('visagismoResult');
+
+            document.getElementById('fruitImage').src = data.image;
+            document.getElementById('faceTypeTitle').textContent = data.name;
+            document.getElementById('faceSubtitle').textContent = data.subtitle;
+
+            document.getElementById('corteText').textContent = data.corte;
+            document.getElementById('maquillajeText').textContent = data.maquillaje;
+            document.getElementById('escotesText').textContent = data.escotes;
+            document.getElementById('gafasText').textContent = data.gafas;
+            document.getElementById('aretesText').textContent = data.aretes;
+            document.getElementById('bolsosText').textContent = data.bolsos;
+            document.getElementById('zapatosText').textContent = data.zapatos;
+            document.getElementById('relojText').textContent = data.reloj;
+
+            resultDiv.classList.remove('hidden');
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openVisagismoModal() {
+            document.getElementById('visagismoModal').classList.remove('hidden');
+            document.getElementById('visagismoModal').classList.add('flex');
+            document.getElementById('visagismoResult').classList.add('hidden');
+            renderFruits();
+        }
+
+        function closeVisagismoModal() {
+            document.getElementById('visagismoModal').classList.add('hidden');
+            document.getElementById('visagismoModal').classList.remove('flex');
+        }
+
+        // ==================== EL RESTO DEL CÓDIGO SE MANTIENE EXACTAMENTE IGUAL ====================
+        const products = [
+            { id: 1, name: 'Vestido Corte Imperio', bodyType: 'apple', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400', isNew: true },
+            { id: 2, name: 'Falda Lápiz Estructurada', bodyType: 'rectangle', image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400', isNew: false },
+
+            // ID 3 - Cambiado a prenda más femenina y adecuada
+            {
+                id: 3,
+                name: 'Vestido Línea A con Escote en V',
+                bodyType: 'inverted',
+                image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400',
+                isNew: true
+            },
+
+            { id: 4, name: 'Pantalón Palazzo', bodyType: 'hourglass', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400', isNew: false },
+            { id: 5, name: 'Vestido Entallado', bodyType: 'rectangle', image: 'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=400', isNew: false },
+            { id: 6, name: 'Vestido Cruzado', bodyType: 'hourglass', image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400', isNew: false },
+            { id: 7, name: 'Falda A-Line', bodyType: 'pear', image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400', isNew: false },
+
+            // ID 8 - Cambiado a vestido más adecuado
+            {
+                id: 8, name: 'Vestido A-Line con Volantes', bodyType: 'inverted',
+                image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=400', isNew: false
+            }
+        ];
+
+        const bodyTypeLabels = {
+            'hourglass': 'Reloj de Arena',
+            'pear': 'Pera',
+            'inverted': 'Triángulo Invertido',
+            'rectangle': 'Rectangular',
+            'apple': 'Ovalado'
+        };
+
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            initTheme();
+        });
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            const noResults = document.getElementById('noResults');
+
+            let filteredProducts = currentFilter === 'all' ? products : products.filter(p => p.bodyType === currentFilter);
+
+            const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+            if (searchTerm) {
+                filteredProducts = filteredProducts.filter(p => p.name.toLowerCase().includes(searchTerm));
+            }
+
+            if (filteredProducts.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="group flex flex-col gap-3 bg-white dark:bg-[#15262a] p-3 rounded-xl border border-transparent hover:border-[#e5e8e8] dark:hover:border-[#2a3b3e] hover:shadow-lg transition-all duration-300 fade-in">
+                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-lg">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style='background-image: url("${product.image}");'></div>
+                        ${product.isNew ? `<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/60 backdrop-blur px-2 py-1 rounded text-xs font-bold text-[#111718] dark:text-white shadow-sm">Nuevo</div>` : ''}
+                    </div>
+                    <div class="flex flex-col gap-1 px-1">
+                        <p class="text-[#111718] dark:text-white text-lg font-bold leading-tight">${product.name}</p>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+                            <p class="text-[#618389] dark:text-[#a0b3b6] text-sm font-medium">Ideal para: ${bodyTypeLabels[product.bodyType]}</p>
+                        </div>
+                        <button onclick="viewDetails(${product.id})" class="mt-3 w-full py-2 rounded-lg bg-[#f0f4f4] dark:bg-[#1a2c30] text-[#111718] dark:text-white text-sm font-semibold group-hover:bg-primary group-hover:text-[#111718] transition-colors">
+                            Ver Detalles
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterByBodyType(type) {
+            currentFilter = type;
+            renderProducts();
+        }
+
+        function filterDesigns() { renderProducts(); }
+        function scrollToFilters() { document.getElementById('filterSection').scrollIntoView({ behavior: 'smooth' }); }
+
+        function openBodyTypeModal() {
+            document.getElementById('bodyTypeModal').classList.remove('hidden');
+            document.getElementById('bodyTypeModal').classList.add('flex');
+        }
+        function closeBodyTypeModal() {
+            document.getElementById('bodyTypeModal').classList.add('hidden');
+            document.getElementById('bodyTypeModal').classList.remove('flex');
+        }
+        function selectBodyType(type) {
+            closeBodyTypeModal();
+            currentFilter = type;
+            scrollToFilters();
+            setTimeout(() => filterByBodyType(type), 500);
+        }
+
+        function openModal() {
+            document.getElementById('appointmentModal').classList.remove('hidden');
+            document.getElementById('appointmentModal').classList.add('flex');
+        }
+        function closeModal() {
+            document.getElementById('appointmentModal').classList.add('hidden');
+            document.getElementById('appointmentModal').classList.remove('flex');
+        }
+        function handleAppointment(event) {
+            event.preventDefault();
+            alert('¡Gracias! Tu cita ha sido reservada. Te contactaremos pronto.');
+            closeModal();
+        }
+        const productDetails = {
+            1: {
+                name: 'Vestido Corte Imperio',
+                bodyType: 'Ovalado / Manzana 👍',
+                why: [
+                    'La línea de corte justo debajo del busto disimula el abdomen y la zona media.',
+                    'Fluye suavemente desde el pecho hacia abajo sin ceñirse al cuerpo.',
+                    'Alarga visualmente la silueta creando una línea vertical elegante.',
+                    'Resalta el busto, que suele ser uno de los mejores activos de este tipo de cuerpo.'
+                ],
+                tips: [
+                    'Elige versiones con escote en V o escote cuadrado para alargar el cuello.',
+                    'Largo ideal: midi (hasta la pantorrilla) o largo hasta el tobillo para mayor elegancia.',
+                    'Telas fluidas con caída como chiffon, viscosa o seda son las más favorecedoras.',
+                    'Colores sólidos o estampados pequeños y sutiles estilizan más que los grandes.',
+                    'Añade un cinturón fino justo debajo del busto para definir aún más el corte imperio.',
+                    'Combínalo con tacones de aguja o sandalias con tiras para alargar la figura.'
+                ],
+                avoid: 'Vestidos muy ajustados en el abdomen, cortes rectos sin definición, telas rígidas o brillantes que marquen el volumen, y estampados muy grandes o llamativos en la zona del vientre.'
+            },
+            4: {
+                name: 'Pantalón Palazzo',
+                bodyType: 'Reloj de Arena 👍',
+                why: [
+                    'Resalta tu cintura marcada gracias a su corte alto.',
+                    'Equilibra visualmente tus caderas y glúteos con la amplitud de la pierna.',
+                    'Alarga las piernas y da un aspecto elegante y fluido.'
+                ],
+                tips: [
+                    'Prefiere pantalones con cintura alta (high waist).',
+                    'Elige telas con buena caída (no muy rígidas).',
+                    'Combínalo con blusas o tops entallados o crop tops para marcar la cintura.',
+                    'Tacones o sandalias con tiras finas alargan aún más la figura.',
+                    'Colores recomendados: tonos neutros (beige, negro, blanco, terracota) o tonos sólidos oscuros.'
+                ],
+                avoid: 'Pantalones muy ajustados en la cadera o con muchos bolsillos laterales grandes.'
+            },
+            6: {
+                name: 'Vestido Cruzado',
+                bodyType: 'Reloj de Arena 👍',
+                why: [
+                    'El cruce marca y resalta naturalmente tu cintura estrecha.',
+                    'El escote en V alarga el cuello y favorece el busto.',
+                    'La falda con movimiento equilibra tus caderas.',
+                    'Crea una silueta muy femenina y elegante.'
+                ],
+                tips: [
+                    'Elige versiones con cinturón o lazo para acentuar aún más la cintura.',
+                    'Largo ideal: por debajo de la rodilla (midi) o largo hasta el tobillo.',
+                    'Escote en V profundo o moderado se ve espectacular.',
+                    'Telas con caída (viscosa, crepé, seda) son las más favorecedoras.',
+                    'Puedes usarlo tanto casual (con sandalias) como formal (con tacones).'
+                ],
+                avoid: 'Vestidos cruzados demasiado holgados o sin definición en la cintura.'
+            },
+            // ==================== NUEVOS PRODUCTOS ====================
+            7: {
+                name: 'Falda A-Line',
+                bodyType: 'Cuerpo Pera (Triángulo) 👍',
+                why: [
+                    'Su corte en forma de "A" disimula el volumen de caderas y muslos.',
+                    'Marca suavemente la cintura, creando un contraste bonito con la parte superior más estrecha.',
+                    'Alarga visualmente las piernas y equilibra la silueta.',
+                    'Da un aspecto femenino, elegante y fluido.'
+                ],
+                tips: [
+                    'Elige faldas con buena caída (telas como crepé, viscosa o algodón con peso).',
+                    'Largo ideal: por encima de la rodilla o midi (justo debajo de la rodilla).',
+                    'Combínala con blusas entalladas, tops cropped o camisas ajustadas para resaltar la cintura.',
+                    'Colores oscuros en la parte inferior ayudan a reducir visualmente el volumen.',
+                    'Tacones o zapatos con un poco de altura estilizan aún más la figura.'
+                ],
+                avoid: 'Faldas muy ajustadas (tipo lápiz), faldas con muchos volantes o pliegues excesivos en la cadera, y telas demasiado rígidas.'
+            },
+            2: {
+                name: 'Falda Lápiz Estructurada',
+                bodyType: 'Rectangular 👍',
+                why: [
+                    'Su corte ajustado crea curvas donde naturalmente hay líneas rectas.',
+                    'Define la cadera y los glúteos, aportando volumen en la parte inferior.',
+                    'Marca visualmente la diferencia entre cintura y cadera.',
+                    'Da un aspecto sofisticado, elegante y muy femenino.'
+                ],
+                tips: [
+                    'Elige tallas que se ajusten bien a la cadera sin quedar muy apretadas.',
+                    'Largo ideal: justo por encima o por debajo de la rodilla.',
+                    'Combínala con blusas con volumen o tops con detalle en el cuello para crear curvas arriba.',
+                    'Añade un cinturón en la cintura para crear la ilusión de una cintura más marcada.',
+                    'Colores oscuros en la falda y colores claros arriba equilibran la silueta.',
+                    'Tacones medianos o altos alargan las piernas y estilizan la figura.'
+                ],
+                avoid: 'Faldas demasiado holgadas o con mucho vuelo que eliminen la definición de la cadera, y telas muy rígidas que no se adapten al cuerpo.'
+            },
+            5: {
+                name: 'Vestido Entallado',
+                bodyType: 'Rectangular 👍',
+                why: [
+                    'El corte entallado crea una cintura definida que la silueta rectangular naturalmente no tiene.',
+                    'Aporta estructura y forma al torso, creando la ilusión de curvas.',
+                    'Alarga visualmente el cuerpo gracias a sus líneas verticales.',
+                    'Da un aspecto profesional, moderno y muy favorecedor.'
+                ],
+                tips: [
+                    'Busca chaquetas con pinzas o corte en la cintura para marcar la figura.',
+                    'Largo ideal: hasta la cadera o un poco más abajo para alargar el torso.',
+                    'Combínala con pantalones de tiro alto o faldas lápiz para completar la silueta.',
+                    'Colores sólidos o con rayas verticales finas son los más favorecedores.',
+                    'Elige solapa en V o escote profundo para alargar el cuello.',
+                    'Telas con estructura media (lana, tweed suave, algodón con cuerpo) son ideales.'
+                ],
+                avoid: 'Chaquetas oversized o muy holgadas, chaquetas con hombreras exageradas, y cortes rectos sin definición en la cintura.'
+            },
+            3: {
+                name: 'Vestido Línea A con Escote en V',
+                bodyType: 'Triángulo Invertido 👍',
+                why: [
+                    'El escote en V crea una línea vertical que reduce visualmente el ancho de hombros.',
+                    'La silueta en línea A añade volumen en la parte inferior, equilibrando la figura.',
+                    'El corte fluido suaviza la zona superior sin ceñirse a los hombros.',
+                    'Estiliza toda la silueta creando proporciones armónicas de arriba hacia abajo.'
+                ],
+                tips: [
+                    'Elige vestidos con escote en V moderado o profundo para alargar el cuello.',
+                    'Busca la línea A con vuelo desde la cintura o las caderas.',
+                    'Colores sólidos o estampados sutiles en la parte superior, más llamativos abajo.',
+                    'Añade un cinturón fino o lazada en la cintura para definir la figura.',
+                    'Telas fluidas como chiffon, viscosa o crepé son las más favorecedoras.',
+                    'Combínalo con tacones de aguja o sandalias con tiras para alargar las piernas.'
+                ],
+                avoid: 'Vestidos con mangas abullonadas, hombreras pronunciadas, escotes cuadrados o rectos, y cortes muy ajustados en la zona del busto y hombros.'
+            },
+            8: {
+                name: 'Vestido con Escote en V',
+                bodyType: 'Triángulo Invertido 👍',
+                why: [
+                    'El escote en V alarga el cuello y reduce visualmente el ancho de hombros.',
+                    'Suaviza la zona superior del cuerpo, que suele ser más ancha.',
+                    'La falda con movimiento o evasé añade volumen en la parte inferior, equilibrando la figura.',
+                    'Crea una línea vertical que estiliza toda la silueta.'
+                ],
+                tips: [
+                    'Prefiere escotes en V profundos o moderados.',
+                    'Busca vestidos con falda A-line, evasé o con algo de vuelo en la parte baja.',
+                    'Colores claros o estampados en la falda ayudan a atraer la mirada hacia abajo.',
+                    'Puedes añadir un cinturón fino para marcar la cintura.',
+                    'Telas con buena caída (viscosa, crepé, chiffon) son ideales.'
+                ],
+                avoid: 'Vestidos con hombreras, mangas abullonadas, escotes cerrados o cuadrados, y prendas muy ajustadas en la zona de hombros y busto.'
+            },
+            9: {
+                name: 'Top Asimétrico',
+                bodyType: 'Triángulo Invertido 👍',
+                why: [
+                    'El corte asimétrico desvía la atención del ancho de hombros.',
+                    'Crea líneas diagonales que rompen la horizontalidad de la zona superior.',
+                    'Equilibra visualmente la silueta al dirigir la mirada hacia el centro.',
+                    'Da un toque moderno y original a tu look.'
+                ],
+                tips: [
+                    'Combínalo con faldas A-line o pantalones de tiro alto con pierna ancha.',
+                    'Elige colores neutros o tonos oscuros en la parte superior.',
+                    'Agrega accesorios en la parte inferior para equilibrar visualmente.',
+                    'Telas fluidas y con caída son las más favorecedoras.',
+                    'Evita complementarlo con chaquetas de hombros estructurados.'
+                ],
+                avoid: 'Tops con hombreras, patrones muy llamativos en la zona del busto o mangas muy voluminosas.'
+            }
+        };
+
+        function viewDetails(id) {
+            const detail = productDetails[id];
+            if (!detail) {
+                alert('Detalles próximamente disponibles para este diseño.');
+                return;
+            }
+
+            // Crear modal dinámico
+            const existing = document.getElementById('detailModal');
+            if (existing) existing.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'detailModal';
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[200] p-4';
+            modal.innerHTML = `
+        <div class="bg-white dark:bg-[#15262a] rounded-2xl max-w-lg w-full p-8 shadow-2xl max-h-[90vh] overflow-y-auto fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-2xl font-bold dark:text-white">${detail.name}</h3>
+                    <p class="text-primary font-semibold text-sm mt-1">Ideal para ${detail.bodyType}</p>
+                </div>
+                <button onclick="document.getElementById('detailModal').remove()"
+                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-bold text-sm uppercase tracking-widest text-primary mb-3">¿Por qué te favorece?</h4>
+                <ul class="space-y-2">
+                    ${detail.why.map(w => `
+                        <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                            <span class="material-symbols-outlined text-primary text-base mt-0.5">check_circle</span>
+                            ${w}
+                        </li>`).join('')}
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-bold text-sm uppercase tracking-widest text-primary mb-3">Consejos para lucirlo mejor</h4>
+                <ul class="space-y-2">
+                    ${detail.tips.map(t => `
+                        <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                            <span class="material-symbols-outlined text-yellow-500 text-base mt-0.5">star</span>
+                            ${t}
+                        </li>`).join('')}
+                </ul>
+            </div>
+
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-xl p-4">
+                <h4 class="font-bold text-sm uppercase tracking-widest text-red-500 mb-1">Evita</h4>
+                <p class="text-sm text-gray-700 dark:text-gray-300">${detail.avoid}</p>
+            </div>
+
+            <button onclick="document.getElementById('detailModal').remove()"
+                class="mt-6 w-full py-3 bg-primary text-[#111718] font-bold rounded-xl hover:bg-[#0ea5c2] transition-colors">
+                Entendido
+            </button>
+        </div>
+    `;
+
+            // Cerrar al hacer clic fuera
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+
+            document.body.appendChild(modal);
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.textContent = 'dark_mode';
+            } else {
+                html.classList.add('dark');
+                icon.textContent = 'light_mode';
+            }
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('theme') || 'light';
+            document.documentElement.classList.add(saved);
+            document.getElementById('themeIcon').textContent = saved === 'dark' ? 'light_mode' : 'dark_mode';
+        }
+        function confirmarCita(e) {
+            e.preventDefault();
+
+            // Obtener los valores del formulario
+            const nombre = document.getElementById('nombre')?.value.trim() || 'Sin nombre';
+            const telefono = document.getElementById('telefono')?.value.trim() || '';
+            const fecha = document.getElementById('fecha')?.value || 'No especificada';
+
+            if (!nombre || !fecha) {
+                alert("Por favor completa el nombre y la fecha.");
+                return;
+            }
+
+            // Mensaje para WhatsApp
+            const mensaje = `*🔔 NUEVA CITA - BRITASGG*\n\n` +
+                `👤 *Nombre:* ${nombre}\n` +
+                `📱 *Teléfono:* ${telefono || 'No registrado'}\n` +
+                `📅 *Fecha:* ${fecha}\n` +
+                `🛍️ *Servicio:* Consulta de Imagen / Visagismo\n\n` +
+                `✅ Cliente quiere agendar cita`;
+
+            // ==================== CAMBIA ESTE NÚMERO ====================
+            const tuNumero = "573127308680";   // ←←← Reemplaza con tu número real (con 57)
+
+            const url = `https://wa.me/${tuNumero}?text=${encodeURIComponent(mensaje)}`;
+
+            // Abrir WhatsApp
+            window.open(url, "_blank");
+
+            alert("✅ Cita enviada por WhatsApp. Te contactaremos pronto.");
+
+            // Opcional: Cerrar el modal
+            // closeModal();  // descomenta si tienes una función para cerrar el modal
+        }
+    </script>
+</body>
+
+</html>

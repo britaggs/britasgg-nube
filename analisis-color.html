@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Análisis de Color Personalizado - BRITASGG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        // Mostrar usuario activo
+        document.addEventListener('DOMContentLoaded', function () {
+            const user = JSON.parse(localStorage.getItem('brit_user') || 'null');
+            const wrap = document.getElementById('authBtnWrap');
+            if (!wrap) return;
+
+            if (user) {
+                const primerNombre = user.nombre ? user.nombre.split(' ')[0] : 'Usuario';
+                wrap.innerHTML = `
+            <div class="flex items-center gap-2">
+                <div class="flex flex-col items-end">
+                    <span style="font-size:10px;color:#6b7280">Hola,</span>
+                    <span style="font-size:13px;font-weight:800;color:#11b4d4">${primerNombre} 👋</span>
+                </div>
+                <button onclick="logoutPage()" title="Cerrar sesión"
+                    class="flex items-center gap-1 cursor-pointer rounded-lg h-9 px-3 border border-gray-300 dark:border-gray-600 text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <span class="material-symbols-outlined" style="font-size:16px">logout</span>
+                </button>
+            </div>`;
+            } else {
+                wrap.innerHTML = `
+            <a href="index.html?login=required"
+                class="flex items-center gap-2 rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity">
+                <span class="material-symbols-outlined" style="font-size:16px">person</span>
+                Ingresar
+            </a>`;
+            }
+        });
+
+        function logoutPage() {
+            localStorage.removeItem('brit_token');
+            localStorage.removeItem('brit_user');
+            window.location.href = 'index.html';
+        }
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11b4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#18282b",
+                        "text-main": "#111718",
+                        "text-muted": "#618389",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .color-radio:checked+div {
+            transform: scale(1.15);
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #11b4d4;
+        }
+
+        .dark .color-radio:checked+div {
+            box-shadow: 0 0 0 2px #101f22, 0 0 0 4px #11b4d4;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white antialiased transition-colors duration-200">
+
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-50 w-full bg-surface-light dark:bg-surface-dark border-b border-slate-100 dark:border-slate-800 transition-colors">
+        <div class="px-4 md:px-10 py-3 flex items-center justify-between mx-auto max-w-[1440px]">
+            <a href="index.html"
+                class="flex items-center gap-3 text-text-main dark:text-white hover:opacity-80 transition-opacity">
+                <div class="size-8 text-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-3xl">checkroom</span>
+                </div>
+                <div class="flex flex-col">
+                    <h2 class="text-xl font-black leading-none tracking-tight">BRITASGG</h2>
+                    <span class="text-[10px] font-bold text-text-muted uppercase tracking-widest">el vestir del día a
+                        día</span>
+                </div>
+            </a>
+            <div class="hidden md:flex flex-1 justify-end gap-8 items-center">
+                <nav class="flex items-center gap-6">
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="index.html">Inicio</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors"
+                        href="index.html#servicios">Servicios</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors"
+                        href="index.html#galeria">Galería</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors"
+                        href="index.html#contacto">Contacto</a>
+                </nav>
+                <button onclick="toggleTheme()"
+                    class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <span id="themeIcon" class="material-symbols-outlined text-xl">dark_mode</span>
+                </button>
+
+                <!-- Indicador de sesión -->
+                <div id="authBtnWrap"></div>
+            </div>
+            <button onclick="toggleMenu()" class="md:hidden text-text-main dark:text-white">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full px-4 md:px-10 py-8 mx-auto max-w-[1440px]">
+        <section class="max-w-[960px] mx-auto mb-10">
+            <div class="flex flex-col gap-4 text-center md:text-left">
+                <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tight text-text-main dark:text-white">
+                    Análisis de Color Personalizado
+                </h1>
+                <p class="text-lg text-text-muted dark:text-slate-400 max-w-2xl">
+                    Introduce tus características para descubrir la paleta de telas y colores que más favorecen tu
+                    belleza natural.
+                </p>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-[1280px] mx-auto">
+            <!-- Left Column - Form -->
+            <div class="lg:col-span-7 flex flex-col gap-10">
+
+                <!-- Skin Tone -->
+                <div
+                    class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span
+                            class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold">1</span>
+                        <h3 class="text-xl font-bold">Tu Tono de Piel</h3>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-4 justify-items-center">
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="skin_tone" type="radio" value="clara" checked />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#F9E4D4] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Clara</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="skin_tone" type="radio" value="media-clara" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#E8C4A6] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Media-Clara</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="skin_tone" type="radio" value="media" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#C6926F] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Media</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="skin_tone" type="radio" value="bronceada" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#9E6B48] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Bronceada</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="skin_tone" type="radio" value="oscura" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#5C3A21] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Oscura</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="skin_tone" type="radio" value="profunda" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#2F1D12] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Profunda</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Hair Color -->
+                <div
+                    class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span
+                            class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold">2</span>
+                        <h3 class="text-xl font-bold">Tu Color de Cabello</h3>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-4 justify-items-center">
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="hair_color" type="radio" value="rubio" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#E6BE8A] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Rubio</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="hair_color" type="radio" value="rojo" checked />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#A54F30] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Rojo</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="hair_color" type="radio" value="castaño" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#6B4423] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Castaño</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="hair_color" type="radio" value="negro" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#1A1A1A] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Negro</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="hair_color" type="radio" value="gris" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-[#B0B0B0] border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Gris/Plata</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="hair_color" type="radio" value="blanco" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-white border border-slate-200 shadow-sm transition-transform">
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Blanco</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Eye Color -->
+                <div
+                    class="bg-surface-light dark:bg-surface-dark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span
+                            class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary font-bold">3</span>
+                        <h3 class="text-xl font-bold">Tu Color de Ojos</h3>
+                    </div>
+                    <div class="grid grid-cols-3 sm:grid-cols-5 gap-4 justify-items-center">
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="eye_color" type="radio" value="azul" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-gradient-to-br from-[#A8D0E6] to-[#4A7C9D] border border-slate-200 shadow-sm transition-transform relative overflow-hidden">
+                                <div class="absolute inset-0 bg-black opacity-10 rounded-full w-4 h-4 m-auto"></div>
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Azul</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="eye_color" type="radio" value="verde" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-gradient-to-br from-[#98C9A3] to-[#4F7942] border border-slate-200 shadow-sm transition-transform relative overflow-hidden">
+                                <div class="absolute inset-0 bg-black opacity-10 rounded-full w-4 h-4 m-auto"></div>
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Verde</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="eye_color" type="radio" value="miel" checked />
+                            <div
+                                class="w-14 h-14 rounded-full bg-gradient-to-br from-[#C9B380] to-[#8B7355] border border-slate-200 shadow-sm transition-transform relative overflow-hidden">
+                                <div class="absolute inset-0 bg-black opacity-10 rounded-full w-4 h-4 m-auto"></div>
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Miel</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="eye_color" type="radio" value="cafe" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-gradient-to-br from-[#8D6E63] to-[#4E342E] border border-slate-200 shadow-sm transition-transform relative overflow-hidden">
+                                <div class="absolute inset-0 bg-black opacity-10 rounded-full w-4 h-4 m-auto"></div>
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Café</span>
+                        </label>
+                        <label class="cursor-pointer group flex flex-col items-center gap-2">
+                            <input class="color-radio sr-only" name="eye_color" type="radio" value="oscuro" />
+                            <div
+                                class="w-14 h-14 rounded-full bg-gradient-to-br from-[#4E342E] to-[#211210] border border-slate-200 shadow-sm transition-transform relative overflow-hidden">
+                                <div class="absolute inset-0 bg-black opacity-10 rounded-full w-4 h-4 m-auto"></div>
+                            </div>
+                            <span class="text-xs font-medium text-text-muted">Oscuro</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <div class="pt-4">
+                    <button onclick="generateAnalysis()"
+                        class="w-full bg-primary hover:bg-cyan-500 text-slate-900 font-bold text-lg h-14 rounded-xl shadow-lg shadow-cyan-500/20 transition-all active:scale-[0.99] flex items-center justify-center gap-3">
+                        <span class="material-symbols-outlined">auto_awesome</span>
+                        Generar Análisis de Color
+                    </button>
+                    <p class="text-center text-sm text-text-muted mt-4">
+                        Basado en teoría del color estacional de 12 tonos
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Column - Results -->
+            <div class="lg:col-span-5">
+                <div class="sticky top-24">
+                    <!-- Rostro interactivo -->
+                    <div
+                        class="bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 rounded-3xl p-6 shadow-xl mb-6">
+                        <h3 class="text-lg font-bold mb-4 text-center">Vista previa</h3>
+                        <div class="flex justify-center">
+                            <svg id="rostroSVG" viewBox="0 0 200 260" width="200" height="260"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <!-- Cabello posterior -->
+                                <ellipse id="cabellosuperior" cx="100" cy="80" rx="68" ry="75" fill="#4a2912" />
+                                <rect id="cabelloposterior" x="32" y="100" width="136" height="120" rx="20"
+                                    fill="#4a2912" />
+                                <!-- Cuello -->
+                                <rect id="cuello" cx="100" x="85" y="195" width="30" height="35" fill="#E8C4A6" />
+                                <!-- Cara -->
+                                <ellipse id="cara" cx="100" cy="130" rx="60" ry="70" fill="#E8C4A6" />
+                                <!-- Orejas -->
+                                <ellipse id="orejaIzq" cx="38" cy="130" rx="10" ry="14" fill="#E8C4A6" />
+                                <ellipse id="orejaDer" cx="162" cy="130" rx="10" ry="14" fill="#E8C4A6" />
+                                <!-- Cejas -->
+                                <path d="M68 100 Q80 94 92 100" stroke="#4a2912" stroke-width="3" fill="none"
+                                    stroke-linecap="round" id="cejaIzq" />
+                                <path d="M108 100 Q120 94 132 100" stroke="#4a2912" stroke-width="3" fill="none"
+                                    stroke-linecap="round" id="cejaDer" />
+                                <!-- Ojos -->
+                                <g id="ojoIzquierdo">
+                                    <ellipse cx="80" cy="118" rx="14" ry="10" fill="white" />
+                                    <ellipse cx="80" cy="118" rx="8" ry="8" fill="#8b6914" />
+                                    <ellipse cx="80" cy="118" rx="5" ry="5" fill="#3d2b1f" />
+                                    <ellipse cx="77" cy="115" rx="2" ry="2" fill="white" />
+                                </g>
+                                <g id="ojoDerecho">
+                                    <ellipse cx="120" cy="118" rx="14" ry="10" fill="white" />
+                                    <ellipse cx="120" cy="118" rx="8" ry="8" fill="#8b6914" />
+                                    <ellipse cx="120" cy="118" rx="5" ry="5" fill="#3d2b1f" />
+                                    <ellipse cx="117" cy="115" rx="2" ry="2" fill="white" />
+                                </g>
+                                <!-- Nariz -->
+                                <path d="M96 130 Q100 148 104 130" stroke="#c8956c" stroke-width="1.5" fill="none"
+                                    stroke-linecap="round" />
+                                <path d="M92 148 Q100 154 108 148" stroke="#c8956c" stroke-width="1.5" fill="none"
+                                    stroke-linecap="round" />
+                                <!-- Boca -->
+                                <path d="M82 168 Q100 180 118 168" stroke="#c47060" stroke-width="2.5" fill="none"
+                                    stroke-linecap="round" />
+                                <path d="M88 168 Q100 173 112 168" stroke="#e8a090" stroke-width="1.5" fill="none"
+                                    stroke-linecap="round" />
+                                <!-- Mejillas -->
+                                <ellipse cx="65" cy="148" rx="14" ry="9" fill="#f4a0a0" opacity="0.35" />
+                                <ellipse cx="135" cy="148" rx="14" ry="9" fill="#f4a0a0" opacity="0.35" />
+                                <!-- Cabello frontal -->
+                                <path id="cabellofrontal"
+                                    d="M32 90 Q40 30 100 25 Q160 30 168 90 Q150 60 100 55 Q50 60 32 90Z"
+                                    fill="#4a2912" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div id="resultCard"
+                        class="bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 rounded-3xl p-6 lg:p-8 shadow-xl relative overflow-hidden hidden">
+                        <div
+                            class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="uppercase tracking-widest text-xs font-bold text-text-muted">Tu
+                                    Resultado</span>
+                                <div class="flex gap-1">
+                                    <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                                    <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                                    <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                                    <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                                    <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                                </div>
+                            </div>
+                            <h2 id="seasonTitle" class="text-3xl font-black text-text-main dark:text-white mb-2">Otoño
+                                Cálido</h2>
+                            <p id="seasonDescription" class="text-text-muted text-sm mb-6 leading-relaxed"></p>
+
+                            <!-- Telas Recomendadas -->
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="text-sm font-bold mb-3 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-primary text-base">palette</span>
+                                        Telas Recomendadas
+                                    </h4>
+                                    <div id="fabricGrid" class="grid grid-cols-2 gap-3"></div>
+                                </div>
+
+                                <!-- Colores a Evitar -->
+                                <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4">
+                                    <h4 class="text-xs font-bold mb-3 flex items-center gap-2 text-text-muted">
+                                        <span class="material-symbols-outlined text-base">block</span>
+                                        Colores a Evitar
+                                    </h4>
+                                    <div id="avoidColors" class="flex gap-3 flex-wrap"></div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex gap-3 pt-2">
+                                    <button onclick="saveProfile()"
+                                        class="flex-1 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-text-main dark:text-white py-2 rounded-lg text-sm font-medium transition-colors">
+                                        Guardar Perfil
+                                    </button>
+                                    <button onclick="viewDesigns()"
+                                        class="flex-1 bg-text-main dark:bg-white text-white dark:text-black py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
+                                        Ver Diseños
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-20 border-t border-slate-100 dark:border-slate-800 py-8 bg-surface-light dark:bg-surface-dark">
+        <div class="max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-sm text-text-muted">© 2026 BRITASGG. Todos los derechos reservados.</p>
+            <div class="flex gap-6">
+                <a class="text-sm text-text-muted hover:text-primary" href="#">Privacidad</a>
+                <a class="text-sm text-text-muted hover:text-primary" href="#">Términos</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+            // ── Protección de ruta ─────────────────────────────────────
+            (function protegerRuta() {
+                const user = JSON.parse(localStorage.getItem('brit_user') || 'null');
+                const token = localStorage.getItem('brit_token');
+                if (!user || !token) {
+                    // Guardar la página que intentaba visitar
+                    sessionStorage.setItem('brit_redirect', window.location.href);
+                    // Redirigir al inicio con mensaje
+                    window.location.href = 'index.html?login=required';
+                }
+            })();
+        // ==================== PALETAS DE COLOR ====================
+        const colorProfiles = {
+            warm_autumn: {
+                title: "Otoño Cálido",
+                description: "Tu paleta irradia calidez y riqueza. Los tonos tierra, dorados y especiados resaltan la profundidad de tus ojos y la calidez de tu piel.",
+                fabrics: [
+                    { name: "Terracota", color: "#B8573E" },
+                    { name: "Mostaza", color: "#E8B923" },
+                    { name: "Oliva", color: "#556B2F" },
+                    { name: "Cobre", color: "#C46A3D" }
+                ],
+                avoid: ["#A5C4E0", "#FF69B4", "#000000"]
+            },
+            warm_spring: {
+                title: "Primavera Cálida",
+                description: "Tu paleta es luminosa y alegre. Colores frescos y brillantes como coral, melocotón y verde manzana te favorecen mucho.",
+                fabrics: [
+                    { name: "Coral", color: "#FF7F50" },
+                    { name: "Melocotón", color: "#FFB07C" },
+                    { name: "Amarillo Claro", color: "#FFCF6D" },
+                    { name: "Verde Primavera", color: "#8DB600" }
+                ],
+                avoid: ["#000080", "#4B0082", "#696969"]
+            },
+            cool_winter: {
+                title: "Invierno Frío",
+                description: "Tu paleta es dramática y contrastante. Colores intensos y puros como negro, blanco y joyas brillantes te quedan espectaculares.",
+                fabrics: [
+                    { name: "Negro Intenso", color: "#0A0A0A" },
+                    { name: "Azul Real", color: "#003366" },
+                    { name: "Magenta", color: "#C71585" },
+                    { name: "Blanco Puro", color: "#F8F8F8" }
+                ],
+                avoid: ["#FF8C00", "#FFD700", "#F5DEB3"]
+            },
+            cool_summer: {
+                title: "Verano Frío",
+                description: "Tu paleta es suave y refinada. Tonos fríos, apagados y elegantes como lavanda, azul polvo y rosa malva te sientan de maravilla.",
+                fabrics: [
+                    { name: "Lavanda Suave", color: "#D8B4E8" },
+                    { name: "Azul Polvo", color: "#A3BFFA" },
+                    { name: "Rosa Malva", color: "#E0B0FF" },
+                    { name: "Gris Perla", color: "#C5C6C7" }
+                ],
+                avoid: ["#FF4500", "#DAA520", "#8B4513"]
+            }
+        };
+
+        // Función para determinar la estación según combinación
+        function determineSeason(skin, hair, eyes) {
+            // Lógica simplificada pero efectiva basada en teoría de color estacional
+            if ((skin === "clara" || skin === "media-clara") && (hair === "rubio" || hair === "rojo")) {
+                return "warm_spring";
+            }
+            if ((skin === "media" || skin === "bronceada") && (hair === "castaño" || hair === "rojo")) {
+                return "warm_autumn";
+            }
+            if ((skin === "oscura" || skin === "profunda") && (hair === "negro" || hair === "castaño")) {
+                return "cool_winter";
+            }
+            if ((eyes === "azul" || eyes === "verde") && (hair === "gris" || hair === "rubio")) {
+                return "cool_summer";
+            }
+            // Default
+            return "warm_autumn";
+        }
+
+        function generateAnalysis() {
+            const skin = document.querySelector('input[name="skin_tone"]:checked')?.value || "media";
+            const hair = document.querySelector('input[name="hair_color"]:checked')?.value || "rojo";
+            const eyes = document.querySelector('input[name="eye_color"]:checked')?.value || "miel";
+
+            const seasonKey = determineSeason(skin, hair, eyes);
+            const profile = colorProfiles[seasonKey];
+
+            // Mostrar tarjeta de resultado
+            const resultCard = document.getElementById("resultCard");
+            resultCard.classList.remove("hidden");
+            resultCard.classList.add("fade-in");
+
+            // Actualizar título y descripción
+            document.getElementById("seasonTitle").textContent = profile.title;
+            document.getElementById("seasonDescription").textContent = profile.description;
+
+            // Renderizar telas recomendadas
+            const fabricGrid = document.getElementById("fabricGrid");
+            fabricGrid.innerHTML = "";
+            profile.fabrics.forEach(fabric => {
+                const div = document.createElement("div");
+                div.className = "p-4 rounded-xl text-white font-medium text-sm shadow-sm flex items-center justify-center";
+                div.style.backgroundColor = fabric.color;
+                div.textContent = fabric.name;
+                fabricGrid.appendChild(div);
+            });
+
+            // Renderizar colores a evitar
+            const avoidContainer = document.getElementById("avoidColors");
+            avoidContainer.innerHTML = "";
+            profile.avoid.forEach(color => {
+                const div = document.createElement("div");
+                div.className = "w-12 h-12 rounded-2xl border-4 border-white shadow-md";
+                div.style.backgroundColor = color;
+                avoidContainer.appendChild(div);
+            });
+        }
+
+        // ==================== FUNCIÓN GUARDAR PERFIL EN MYSQL ====================
+        async function saveProfile() {
+            // Obtener los valores seleccionados del análisis
+            const skinTone = document.querySelector('input[name="skin_tone"]:checked')?.value || null;
+            const hairColor = document.querySelector('input[name="hair_color"]:checked')?.value || null;
+            const eyeColor = document.querySelector('input[name="eye_color"]:checked')?.value || null;
+
+            // Pedir nombre y email de forma temporal (prompt)
+            const nombre = prompt("Ingresa tu nombre completo:", "Usuario BRITASGG") || "Usuario Anónimo";
+            const email = prompt("Ingresa tu correo electrónico:", "usuario@britasgg.com") || "sinemail@britasgg.com";
+
+            if (!nombre || !email || !email.includes("@")) {
+                alert("Por favor ingresa un nombre y un correo electrónico válido.");
+                return;
+            }
+
+            const datos = {
+                nombre: nombre,
+                email: email,
+                color_piel: skinTone,
+                color_cabello: hairColor,
+                color_ojos: eyeColor,
+                tipo_rostro: null,
+                tipo_cuerpo: null
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/clientes/guardar-perfil', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert("✅ Perfil guardado correctamente en la base de datos MySQL");
+                } else {
+                    alert("Error: " + (result.message || "No se pudo guardar el perfil"));
+                }
+            } catch (error) {
+                console.error(error);
+                alert("❌ No se pudo conectar con el servidor.\n\nAsegúrate que el backend esté corriendo con:\nnode server.js");
+            }
+        }
+
+        function viewDesigns() {
+            window.location.href = 'catalogo.html';
+        }
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle("dark");
+            const icon = document.getElementById("themeIcon");
+            icon.textContent = document.documentElement.classList.contains("dark") ? "light_mode" : "dark_mode";
+        }
+
+        function toggleMenu() {
+            alert("Menú móvil - Próximamente");
+        }
+
+        // Inicializar tema
+        window.onload = () => {
+            console.log("✅ Análisis de Color BRITASGG cargado correctamente");
+        };
+        // ── ROSTRO INTERACTIVO ────────────────────────────────────
+        const skinColors = {
+            'clara': '#F9E4D4',
+            'media-clara': '#E8C4A6',
+            'media': '#C6926F',
+            'bronceada': '#9E6B48',
+            'oscura': '#5C3A21',
+            'profunda': '#2F1D12'
+        };
+
+        const hairColors = {
+            'rubio': '#D4A843',
+            'rojo': '#8B2500',
+            'castano': '#4a2912',
+            'negro': '#111111',
+            'gris': '#9E9E9E',
+            'blanco': '#F0F0F0',
+            'azul': '#1a3a6b'
+        };
+
+        const eyeColors = {
+            'azul': '#178cd4',
+            'verde': '#1d9e75',
+            'miel': '#c8860a',
+            'cafe': '#6b3a2a',
+            'oscuro': '#1a1a1a'
+        };
+
+        function actualizarRostro() {
+            // Piel
+            const piel = document.querySelector('input[name="skin_tone"]:checked')?.value;
+            if (piel && skinColors[piel]) {
+                const color = skinColors[piel];
+                document.getElementById('cara').setAttribute('fill', color);
+                document.getElementById('orejaIzq').setAttribute('fill', color);
+                document.getElementById('orejaDer').setAttribute('fill', color);
+                document.getElementById('cuello').setAttribute('fill', color);
+            }
+
+            // Cabello
+            const cabello = document.querySelector('input[name="hair_color"]:checked')?.value;
+            if (cabello && hairColors[cabello]) {
+                const color = hairColors[cabello];
+                document.getElementById('cabellosuperior').setAttribute('fill', color);
+                document.getElementById('cabelloposterior').setAttribute('fill', color);
+                document.getElementById('cabellofrontal').setAttribute('fill', color);
+                document.getElementById('cejaIzq').setAttribute('stroke', color);
+                document.getElementById('cejaDer').setAttribute('stroke', color);
+            }
+
+            // Ojos
+            const ojos = document.querySelector('input[name="eye_color"]:checked')?.value;
+            if (ojos && eyeColors[ojos]) {
+                const color = eyeColors[ojos];
+                document.querySelectorAll('#ojoIzquierdo ellipse:nth-child(2), #ojoDerecho ellipse:nth-child(2)')
+                    .forEach(el => el.setAttribute('fill', color));
+            }
+        }
+
+        // Escuchar cambios en los selectores
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('input[name="skin_tone"], input[name="hair_color"], input[name="eye_color"]')
+                .forEach(input => input.addEventListener('change', actualizarRostro));
+            actualizarRostro(); // Mostrar estado inicial
+        });
+    </script>
+</body>
+
+</html>

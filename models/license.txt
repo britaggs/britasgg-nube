@@ -1,0 +1,11 @@
+Model Information:
+* title:	Female base mesh
+* source:	https://sketchfab.com/3d-models/female-base-mesh-b6389ae82f044dbe9945c4dad2cd72ae
+* author:	Drazen (https://sketchfab.com/drazenk)
+
+Model License:
+* license type:	CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)
+* requirements:	Author must be credited. Modified versions must have the same license. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Female base mesh" (https://sketchfab.com/3d-models/female-base-mesh-b6389ae82f044dbe9945c4dad2cd72ae) by Drazen (https://sketchfab.com/drazenk) licensed under CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)

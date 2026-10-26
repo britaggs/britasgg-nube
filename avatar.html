@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Atelier Elegancia - Detalle de Prenda</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        // ── Protección de ruta ─────────────────────────────────────
+        (function protegerRuta() {
+            const user = JSON.parse(localStorage.getItem('brit_user') || 'null');
+            const token = localStorage.getItem('brit_token');
+            if (!user || !token) {
+                // Guardar la página que intentaba visitar
+                sessionStorage.setItem('brit_redirect', window.location.href);
+                // Redirigir al inicio con mensaje
+                window.location.href = 'index.html?login=required';
+            }
+        })();
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#11b4d4",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101f22",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#111718] dark:text-white font-display overflow-x-hidden min-h-screen flex flex-col">
+    <header
+        class="sticky top-0 z-50 bg-white dark:bg-[#1a2c30] border-b border-[#f0f4f4] dark:border-[#2a3c40] px-6 lg:px-10 py-3 shadow-sm">
+        <div
+            class="layout-content-container max-w-[1280px] mx-auto flex items-center justify-between whitespace-nowrap">
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-4 text-[#111718] dark:text-white">
+                    <span class="material-symbols-outlined text-3xl text-primary">checkroom</span>
+                    <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Atelier Elegancia</h2>
+                </div>
+                <div class="hidden md:flex items-center gap-9">
+                    <a class="text-[#111718] dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Inicio</a>
+                    <a class="text-[#111718] dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Catálogo</a>
+                    <a class="text-[#111718] dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Citas</a>
+                    <a class="text-[#111718] dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors"
+                        href="#">Perfil</a>
+                </div>
+            </div>
+            <div class="flex flex-1 justify-end gap-6 items-center">
+                <label class="hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
+                    <div
+                        class="flex w-full flex-1 items-stretch rounded-lg h-full border border-[#e5e7eb] dark:border-[#2a3c40] bg-[#f0f4f4] dark:bg-[#203236]">
+                        <div class="text-[#618389] flex bg-transparent items-center justify-center pl-4 rounded-l-lg">
+                            <span class="material-symbols-outlined text-[20px]">search</span>
+                        </div>
+                        <input
+                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111718] dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-[#618389] px-4 rounded-l-none pl-2 text-sm font-normal"
+                            placeholder="Buscar..." value="" />
+                    </div>
+                </label>
+                <button
+                    class="flex items-center justify-center overflow-hidden rounded-lg h-10 w-10 bg-[#f0f4f4] dark:bg-[#203236] text-[#111718] dark:text-white hover:bg-gray-200 dark:hover:bg-[#2a3c40] transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main class="flex-grow w-full max-w-[1280px] mx-auto px-4 lg:px-10 py-8">
+        <div class="flex flex-wrap items-center gap-2 mb-6 text-sm">
+            <a class="text-[#618389] dark:text-[#8baeb5] font-medium hover:underline" href="#">Catálogo</a>
+            <span class="material-symbols-outlined text-[#618389] dark:text-[#8baeb5] text-xs">chevron_right</span>
+            <a class="text-[#618389] dark:text-[#8baeb5] font-medium hover:underline" href="#">Vestidos de Noche</a>
+            <span class="material-symbols-outlined text-[#618389] dark:text-[#8baeb5] text-xs">chevron_right</span>
+            <span class="text-[#111718] dark:text-white font-medium">Noche Azul</span>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16">
+            <div class="lg:col-span-7 flex flex-col gap-4">
+                <div class="flex justify-between items-center flex-wrap gap-4">
+                    <div class="bg-[#f0f4f4] dark:bg-[#203236] p-1 rounded-lg inline-flex items-center shadow-inner">
+                        <button
+                            class="px-5 py-2 rounded-md text-sm font-medium text-[#618389] dark:text-gray-400 hover:text-[#111718] dark:hover:text-white transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">image</span>
+                            Fotos
+                        </button>
+                        <button
+                            class="px-5 py-2 rounded-md text-sm font-bold bg-white dark:bg-[#1a2c30] text-primary shadow-sm border border-gray-200 dark:border-gray-600 transition-all flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">3d_rotation</span>
+                            Probador Avatar
+                        </button>
+                    </div>
+                    <button
+                        class="flex items-center gap-2 bg-[#111718] dark:bg-white text-white dark:text-[#111718] px-6 py-2.5 rounded-lg font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm ml-auto ring-1 ring-white/20">
+                        <span class="material-symbols-outlined">check_circle</span>
+                        Seleccionar este diseño
+                    </button>
+                </div>
+                <div
+                    class="w-full aspect-[4/5] rounded-xl bg-gray-200 dark:bg-gray-700 overflow-hidden relative group border border-primary/20 shadow-lg">
+                    <div class="absolute inset-0 bg-cover bg-center"
+                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBaElx-0pFiQkSrL0lW4qKLzOaFUnglfrpGyDpdTJ8uJxlmiLqxV8N726pZGn5xGo2xRMXLtpVwo91uc974sFDxkZ6BVCIYdSZa68_TZYyHuJDklgaPPvN6CAYUp5AfJiZo2Yq9tLcXxf4RtPw5HY57Uvn42FnzgtEUhIsewZSEL_EbvainlKJ2Mu_NxtMc7lmN89XS9qA4YasfMrXAYPT9WnheZE-t-FF_KCmytn8-ruTDe5XDbihjZI6z5F7q_Wu73C22pn_saWjd');">
+                        <div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+                        <div
+                            class="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/fabric-of-squares.png')]">
+                        </div>
+                    </div>
+                    <div
+                        class="absolute top-4 left-4 w-72 bg-white/90 dark:bg-[#101f22]/90 backdrop-blur-md p-5 rounded-xl border border-white/20 shadow-xl z-20">
+                        <div
+                            class="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">accessibility_new</span>
+                                <h3 class="font-bold text-sm text-[#111718] dark:text-white">Mis Medidas</h3>
+                            </div>
+                            <span class="text-xs text-primary font-medium cursor-pointer hover:underline">Editar</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-[#618389] dark:text-gray-300">Busto</span>
+                                    <span class="font-bold text-[#111718] dark:text-white">92 cm</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                    <div class="bg-primary h-1.5 rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-[#618389] dark:text-gray-300">Cintura</span>
+                                    <span class="font-bold text-[#111718] dark:text-white">70 cm</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                    <div class="bg-primary h-1.5 rounded-full" style="width: 35%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-[#618389] dark:text-gray-300">Cadera</span>
+                                    <span class="font-bold text-[#111718] dark:text-white">98 cm</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                    <div class="bg-primary h-1.5 rounded-full" style="width: 55%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex gap-2">
+                            <div
+                                class="flex-1 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-xs px-2 py-1.5 rounded flex items-center justify-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                Fit: Perfecto
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 pointer-events-none">
+                        <div
+                            class="absolute top-[32%] left-[30%] right-[30%] border-b border-dashed border-white/60 dark:border-white/40 flex items-end justify-end px-2">
+                            <span class="text-[10px] text-white bg-black/40 px-1 rounded backdrop-blur-sm">Busto</span>
+                        </div>
+                        <div
+                            class="absolute top-[42%] left-[35%] right-[35%] border-b border-dashed border-primary/80 flex items-end justify-end px-2">
+                            <div class="w-2 h-2 rounded-full bg-primary absolute -left-1 top-[-4px]"></div>
+                            <div class="w-2 h-2 rounded-full bg-primary absolute -right-1 top-[-4px]"></div>
+                            <span class="text-[10px] text-white bg-primary px-1 rounded shadow-sm">Cintura</span>
+                        </div>
+                        <div
+                            class="absolute top-[52%] left-[30%] right-[30%] border-b border-dashed border-white/60 dark:border-white/40 flex items-end justify-end px-2">
+                            <span class="text-[10px] text-white bg-black/40 px-1 rounded backdrop-blur-sm">Cadera</span>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 dark:bg-black/70 px-4 py-2 rounded-full shadow-lg flex gap-4 items-center backdrop-blur-sm">
+                        <button class="text-[#618389] hover:text-primary transition-colors"><span
+                                class="material-symbols-outlined">rotate_left</span></button>
+                        <span class="text-xs font-medium text-[#111718] dark:text-white uppercase tracking-wider">360°
+                            View</span>
+                        <button class="text-[#618389] hover:text-primary transition-colors"><span
+                                class="material-symbols-outlined">rotate_right</span></button>
+                    </div>
+                    <button
+                        class="absolute top-4 right-4 bg-white/90 dark:bg-black/70 p-2 rounded-full shadow-lg hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-gray-800 dark:text-white">zoom_in</span>
+                    </button>
+                </div>
+                <div class="grid grid-cols-4 gap-4 opacity-75 hover:opacity-100 transition-opacity">
+                    <div
+                        class="aspect-square rounded-lg bg-gray-200 dark:bg-gray-700 overflow-hidden cursor-pointer border-2 border-transparent hover:border-primary">
+                        <div class="w-full h-full bg-cover bg-center"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9d04JeOpfII6rlSX4o417nhg4EDexT7JnT7siZ0rYU1YkIxLNfOr8aMDrIi1PxW5tGNJS0dcqK8zU6vXNpxNSe4VQUIKcbhmZ8Ek56JNFkwtrChk_6V8b9Hoz01th_ubx4miiSZYQxTjqB_yCp9CoO7RGVzGq2h5lerd3QxCzIi3Bi1MpM6SGscK89fdbTLYxzYq38N584rlVGbyaTkbLcpqdeeESEef0HkosJFn9_G-Sjs46ToAe-w2QWydiDf7xrv3Lb2z9YSGd');">
+                        </div>
+                    </div>
+                    <div
+                        class="aspect-square rounded-lg bg-gray-200 dark:bg-gray-700 overflow-hidden cursor-pointer border border-transparent hover:border-gray-400">
+                        <div class="w-full h-full bg-cover bg-center"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLmGgTSnOI0WcBDxb378Ynbi6axPIkRskYQsGJGPd_ddrvKjVwagnFsB9JxOc0Gd6i0CZ8I2Rbz9gJR6e_zvjAlActDkBbtGD5TDtT8tKInVOO5Q5P0sos9kYdix2za5z5sVT1MnP_VX9pQnAqZvC5aWNJjZqzWfnRxqE66FfSq1T25O0Ry4kaO_KlM7LcpppcFukzcNfUqoM8IPGp7IU0Qrkp7360wL8v_2CjyudC-5dYHSR8EJtKn8or-M31eiTMuxXrQVUb8pxw');">
+                        </div>
+                    </div>
+                    <div
+                        class="aspect-square rounded-lg bg-gray-200 dark:bg-gray-700 overflow-hidden cursor-pointer border border-transparent hover:border-gray-400">
+                        <div class="w-full h-full bg-cover bg-center"
+                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQ1x7GKDtgUBz-asifOHaCqT1E2meijVw9SWTrPA-lvYXmHAsjuKq9tQstsY6ikWbPTgVpsLMzc1D3AtAjpIz4f3JzGStkUEs-uOobOtJNaj99OdRJAFkyzYAQA6d3AIVFN3vaX0GXjWV_K9vpS2XLROTJ_XfzgzG4HnJeRRcuctHsIQCktGZ4Qq7SqbyY60N4kJA9wP9G-CTKhkHVj6YZwDr6a1GQFhi1xGTQd85cjLQQgEyRUxvu4eRefBe4r4Qa_vly9CKbUKHZ');">
+                        </div>
+                    </div>
+                    <div
+                        class="aspect-square rounded-lg bg-gray-200 dark:bg-gray-700 overflow-hidden cursor-pointer border border-transparent hover:border-gray-400 flex items-center justify-center bg-[#f0f4f4] dark:bg-[#203236]">
+                        <span class="material-symbols-outlined text-gray-500">play_circle</span>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-5 flex flex-col h-full">
+                <div class="mb-6">
+                    <span
+                        class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider rounded-full mb-3">Alta
+                        Costura</span>
+                    <h1 class="text-[#111718] dark:text-white text-[36px] font-bold leading-tight tracking-tight mb-2">
+                        Vestido de Gala 'Noche Azul'</h1>
+                    <div class="flex items-baseline gap-3">
+                        <span class="text-2xl font-bold text-[#111718] dark:text-white">$450 - $600 USD</span>
+                        <span class="text-sm text-[#618389] dark:text-gray-400 font-medium">(Precio Estimado)</span>
+                    </div>
+                </div>
+                <div class="prose dark:prose-invert text-[#618389] dark:text-gray-300 mb-8 leading-relaxed">
+                    <p>Una pieza maestra de sofisticación confeccionada en seda italiana de la más alta calidad. El
+                        corte sirena realza la figura natural, mientras que el escote profundo añade un toque de audacia
+                        elegante. Perfecto para bodas de noche y eventos de gala.</p>
+                </div>
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold uppercase tracking-wide text-[#111718] dark:text-white">Catálogo de
+                            Telas BRITASGG</h3>
+                        <a class="text-xs font-semibold text-primary hover:text-[#0ea3c0] flex items-center gap-1"
+                            href="#">
+                            Ver catálogo completo
+                            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                        </a>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-[#1a2c30] p-5 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                        <div class="mb-5">
+                            <p class="text-xs text-[#618389] dark:text-gray-400 mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">palette</span>
+                                1. Selecciona el tipo de tela:
+                            </p>
+                            <div class="grid grid-cols-4 gap-3">
+                                <button class="group flex flex-col items-center gap-2 relative">
+                                    <div
+                                        class="w-full aspect-square rounded-lg bg-gradient-to-br from-[#1a2c4e] to-[#0f1a2e] ring-2 ring-primary ring-offset-2 ring-offset-white dark:ring-offset-[#1a2c30] shadow-md transition-transform transform group-hover:scale-105">
+                                        <div
+                                            class="w-full h-full opacity-30 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')]">
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="absolute top-[-6px] right-[-6px] bg-primary text-white w-5 h-5 rounded-full flex items-center justify-center shadow-sm z-10">
+                                        <span class="material-symbols-outlined text-[12px]">check</span>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-bold text-[#111718] dark:text-white leading-tight text-center">Seda<br />Medianoche</span>
+                                </button>
+                                <button class="group flex flex-col items-center gap-2 relative">
+                                    <div
+                                        class="w-full aspect-square rounded-lg bg-gradient-to-br from-[#800020] to-[#4a0012] border border-transparent group-hover:border-gray-300 dark:group-hover:border-gray-500 shadow-sm transition-all overflow-hidden group-hover:shadow-md">
+                                        <div
+                                            class="w-full h-full opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8Y2lyY2xlIGN4PSIyIiBjeT0iMiIgcj0iMSIgZmlsbD0iI2ZmZiIgZmlsbC1vcGFjaXR5PSIwLjEiLz4KPC9zdmc+')]">
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-medium text-[#618389] dark:text-gray-400 group-hover:text-[#111718] dark:group-hover:text-white leading-tight text-center transition-colors">Terciopelo<br />Royal</span>
+                                </button>
+                                <button class="group flex flex-col items-center gap-2 relative">
+                                    <div
+                                        class="w-full aspect-square rounded-lg bg-gradient-to-br from-[#2a4d38] to-[#15291d] border border-transparent group-hover:border-gray-300 dark:group-hover:border-gray-500 shadow-sm transition-all overflow-hidden group-hover:shadow-md">
+                                        <div
+                                            class="w-full h-full opacity-25 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2IiBoZWlnaHQ9IjYiPgo8cGF0aCBkPSJNMCA2TDYgMEw2IDZMMCA2WiIgZmlsbD0iI2ZmZiIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+Cjwvc3ZnPg==')]">
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-medium text-[#618389] dark:text-gray-400 group-hover:text-[#111718] dark:group-hover:text-white leading-tight text-center transition-colors">Satén<br />Esmeralda</span>
+                                </button>
+                                <button class="group flex flex-col items-center gap-2 relative">
+                                    <div
+                                        class="w-full aspect-square rounded-lg bg-gradient-to-br from-[#101f22] to-[#000000] border border-transparent group-hover:border-gray-300 dark:group-hover:border-gray-500 shadow-sm transition-all overflow-hidden group-hover:shadow-md">
+                                        <div
+                                            class="w-full h-full opacity-30 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8Y2lyY2xlIGN4PSIyIiBjeT0iMiIgcj0iMSIgZmlsbD0iI2ZmZiIgZmlsbC1vcGFjaXR5PSIwLjE1Ii8+Cjwvc3ZnPg==')]">
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-medium text-[#618389] dark:text-gray-400 group-hover:text-[#111718] dark:group-hover:text-white leading-tight text-center transition-colors">Crepé<br />Negro</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-100 dark:border-gray-700 pt-5">
+                            <p class="text-xs text-[#618389] dark:text-gray-400 mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">texture</span>
+                                2. Personaliza la textura y acabado:
+                            </p>
+                            <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                                <label class="cursor-pointer group flex flex-col items-center gap-2 min-w-[70px]">
+                                    <div
+                                        class="w-full aspect-square rounded-full border-2 border-primary p-0.5 bg-white dark:bg-[#203236]">
+                                        <div
+                                            class="w-full h-full rounded-full bg-[#1a2c4e] flex items-center justify-center overflow-hidden relative">
+                                            <div
+                                                class="absolute inset-0 opacity-40 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/fabric-of-squares.png')]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-bold text-primary text-center">Liso<br />Satinado</span>
+                                </label>
+                                <label class="cursor-pointer group flex flex-col items-center gap-2 min-w-[70px]">
+                                    <div
+                                        class="w-full aspect-square rounded-full border-2 border-transparent group-hover:border-gray-300 dark:group-hover:border-gray-500 p-0.5 transition-all">
+                                        <div
+                                            class="w-full h-full rounded-full bg-[#1a2c4e] flex items-center justify-center overflow-hidden relative">
+                                            <div
+                                                class="absolute inset-0 opacity-30 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/climpek.png')]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-medium text-[#618389] dark:text-gray-400 group-hover:text-[#111718] dark:group-hover:text-white text-center transition-colors">Micro<br />Relieve</span>
+                                </label>
+                                <label class="cursor-pointer group flex flex-col items-center gap-2 min-w-[70px]">
+                                    <div
+                                        class="w-full aspect-square rounded-full border-2 border-transparent group-hover:border-gray-300 dark:group-hover:border-gray-500 p-0.5 transition-all">
+                                        <div
+                                            class="w-full h-full rounded-full bg-[#1a2c4e] flex items-center justify-center overflow-hidden relative">
+                                            <div
+                                                class="absolute inset-0 opacity-40 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-medium text-[#618389] dark:text-gray-400 group-hover:text-[#111718] dark:group-hover:text-white text-center transition-colors">Patrón<br />Floral</span>
+                                </label>
+                                <label class="cursor-pointer group flex flex-col items-center gap-2 min-w-[70px]">
+                                    <div
+                                        class="w-full aspect-square rounded-full border-2 border-transparent group-hover:border-gray-300 dark:group-hover:border-gray-500 p-0.5 transition-all">
+                                        <div
+                                            class="w-full h-full rounded-full bg-[#1a2c4e] flex items-center justify-center overflow-hidden relative">
+                                            <div
+                                                class="absolute inset-0 opacity-50 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/diagonal-striped-brick.png')]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-medium text-[#618389] dark:text-gray-400 group-hover:text-[#111718] dark:group-hover:text-white text-center transition-colors">Rayas<br />Sutiles</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-xl p-5 mb-8 flex gap-4 items-start">
+                    <div class="bg-white dark:bg-[#1a2c30] p-2 rounded-full shrink-0 text-primary shadow-sm">
+                        <span class="material-symbols-outlined">lightbulb</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-primary text-sm mb-1">Visualización de Textura Activa</h4>
+                        <p class="text-sm text-[#4a6368] dark:text-gray-300">El avatar ahora muestra el acabado
+                            <strong>Satinado</strong> sobre la <strong>Seda Medianoche</strong>. Observa cómo la luz
+                            incide diferente en los pliegues de la falda.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 mt-auto">
+                    <button
+                        class="w-full bg-primary hover:bg-[#0ea3c0] text-white h-12 rounded-lg font-bold text-base shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        Agendar Cita de Medidas
+                    </button>
+                    <button
+                        class="w-full bg-white dark:bg-[#1a2c30] border border-gray-200 dark:border-gray-700 text-[#111718] dark:text-white h-12 rounded-lg font-bold text-base hover:bg-gray-50 dark:hover:bg-[#203236] transition-all flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">straighten</span>
+                        Modificar Medidas Avatar
+                    </button>
+                </div>
+            </div>
+        </div>
+        <section class="border-t border-[#f0f4f4] dark:border-[#2a3c40] pt-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#111718] dark:text-white mb-2">Completa el Look</h2>
+                    <p class="text-[#618389] dark:text-gray-400">Nuestras estilistas recomiendan estos accesorios para
+                        el vestido 'Noche Azul'.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button
+                        class="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 text-[#111718] dark:text-white transition-colors">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <button
+                        class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-[#0ea3c0] transition-colors shadow-lg shadow-primary/20">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+            <div class="w-full overflow-x-auto pb-6 scrollbar-hide">
+                <div class="flex gap-6 min-w-full">
+                    <div class="min-w-[260px] md:min-w-[280px] group cursor-pointer">
+                        <div
+                            class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-3 bg-white dark:bg-[#1a2c30]">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                data-alt="Silver diamond necklace on display"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApM5S-nm9O3rwQxDmwCFFwrhPVSSTJBMt691A-BIBjG4Z4_MhBbAt_iggmNjyhKB9WKBihqyU0_keUDubO5ie8x-I53YrF9KAycQCShoi6bk3uo--kKHWdOdockQL6Es8fwx_AetouaOu0m1JGI-WiDxxjBXfbx_5FEvSsIaeVK8ie9z9jNGDZJXLLMjaTWE13OJRXhoWQ_8aIC8h68KAkWuaBtH1eh2yXU17mzfeM2u1joSbKc2tDBgrA_0u6RWNjDo4vEYILceWL');">
+                            </div>
+                            <div
+                                class="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-1 rounded flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[12px]">accessibility_new</span> Probar en
+                                Avatar
+                            </div>
+                            <button
+                                class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 dark:bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <h3 class="font-bold text-[#111718] dark:text-white text-lg">Collar 'Luz de Luna'</h3>
+                        <p class="text-sm text-[#618389] dark:text-gray-400 mb-2">Plata y Zirconias</p>
+                        <p class="font-bold text-primary">$120.00 USD</p>
+                    </div>
+                    <div class="min-w-[260px] md:min-w-[280px] group cursor-pointer">
+                        <div
+                            class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-3 bg-white dark:bg-[#1a2c30]">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                data-alt="Silver clutch bag with sequins"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAJhL_59o3xfLlEqEKHgXFA0ersLwIV8uO6e91UBH-yQT-peFJf7Pyh2Lg5uKF7SdgkhnnXH6aQXD8smdNcsPbvwZFh7frU6RWdbsKjgdCxaStU8X1xvSWmH7E2BNeXoFmKRmde_TFCSAMTUYsTqSyx-k6vGo6tHBLTPBG4pU1GHLOpvndiZA9EReZc-jLTk4BMIsMu2C4x5pdH5OvwNIuRQj_v9M-xysDBq6Zy4CCJIqsQHKBCqX8wjj8XZQ45pA86Dq2EbHYBOPgn');">
+                            </div>
+                            <button
+                                class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 dark:bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <h3 class="font-bold text-[#111718] dark:text-white text-lg">Clutch Plateado</h3>
+                        <p class="text-sm text-[#618389] dark:text-gray-400 mb-2">Acabado satinado</p>
+                        <p class="font-bold text-primary">$85.00 USD</p>
+                    </div>
+                    <div class="min-w-[260px] md:min-w-[280px] group cursor-pointer">
+                        <div
+                            class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-3 bg-white dark:bg-[#1a2c30]">
+                            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                data-alt="High heel elegant silver shoes"
+                                style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDWbANrAfW5_u-Xqp7QUqKlrGO-KpceijcfSJDeFqiuGIFM8CL_dBRc35juL7pYECGm_jV59UpiibAM0O1XiqAjzdtW1GX4m6BPnaLoMJmFxHfqlakhBH5RjrcnZyu93NvA2WPVHa9T-piEUfEeL4JCTU7lK7cGU_MAi-sLCzRuCZkfVdxBiQO53BawH6nex91T3l6U4J1SJ8kG9aDkPwF25CFMRn34cAM-e8zGoxc4p9H-_dR70pRliVLEUTgMZYUcT9D2ZA9AFwOe');">
+                            </div>
+                            <button
+                                class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 dark:bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <h3 class="font-bold text-[#111718] dark:text-white text-lg">Stilettos 'Cielo'</h3>
+                        <p class="text-sm text-[#618389] dark:text-gray-400 mb-2">Tacón 10cm</p>
+                        <p class="font-bold text-primary">$150.00 USD</p>
+                    </div>
+                    <div class="min-w-[260px] md:min-w-[280px] group cursor-pointer flex flex-col">
+                        <div
+                            class="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-3 bg-primary/10 dark:bg-primary/5 border-2 border-dashed border-primary/30 flex flex-col items-center justify-center p-6 text-center">
+                            <span class="material-symbols-outlined text-4xl text-primary mb-3">styler</span>
+                            <h4 class="font-bold text-[#111718] dark:text-white mb-2">¿Necesitas ayuda?</h4>
+                            <p class="text-sm text-[#618389] dark:text-gray-400">Habla con una de nuestras diseñadoras
+                                para encontrar los accesorios perfectos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-white dark:bg-[#1a2c30] border-t border-[#f0f4f4] dark:border-[#2a3c40] mt-auto">
+        <div class="max-w-[1280px] mx-auto px-10 py-12 flex flex-col md:flex-row justify-between gap-8">
+            <div class="flex flex-col gap-4 max-w-sm">
+                <div class="flex items-center gap-2 text-[#111718] dark:text-white">
+                    <span class="material-symbols-outlined text-2xl text-primary">checkroom</span>
+                    <h2 class="text-lg font-bold">Atelier Elegancia</h2>
+                </div>
+                <p class="text-sm text-[#618389] dark:text-gray-400">Creando momentos inolvidables a través de la alta
+                    costura y el diseño personalizado.</p>
+            </div>
+            <div class="flex gap-12 flex-wrap">
+                <div class="flex flex-col gap-3">
+                    <h4 class="font-bold text-[#111718] dark:text-white">Explorar</h4>
+                    <a class="text-sm text-[#618389] dark:text-gray-400 hover:text-primary" href="#">Colecciones</a>
+                    <a class="text-sm text-[#618389] dark:text-gray-400 hover:text-primary" href="#">Nuestra
+                        Historia</a>
+                    <a class="text-sm text-[#618389] dark:text-gray-400 hover:text-primary" href="#">Blog de Estilo</a>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h4 class="font-bold text-[#111718] dark:text-white">Ayuda</h4>
+                    <a class="text-sm text-[#618389] dark:text-gray-400 hover:text-primary" href="#">Guía de Tallas</a>
+                    <a class="text-sm text-[#618389] dark:text-gray-400 hover:text-primary" href="#">Envíos y
+                        Devoluciones</a>
+                    <a class="text-sm text-[#618389] dark:text-gray-400 hover:text-primary" href="#">Contacto</a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-[#f0f4f4] dark:border-[#2a3c40] py-6 px-10 text-center">
+            <p class="text-xs text-[#618389] dark:text-gray-500">© 2024 Atelier Elegancia. Todos los derechos
+                reservados.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

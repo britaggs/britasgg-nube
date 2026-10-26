@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — BRITASGG</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0d0f14;
+            --surface: #151820;
+            --surface2: #1c2030;
+            --border: #252a3a;
+            --primary: #11b4d4;
+            --primary2: #11b4d4;
+            --accent: #7c3aed;
+            --text: #f0f2f8;
+            --muted: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #11b4d4;
+            --mono: 'DM Mono', monospace;
+            --sans: 'Syne', sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ── SIDEBAR ──────────────────────────────── */
+        .sidebar {
+            width: 240px;
+            min-height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-brand h1 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--primary);
+        }
+
+        .sidebar-brand span {
+            font-size: 10px;
+            font-family: var(--mono);
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-section {
+            padding: 16px 12px 8px;
+            font-size: 10px;
+            font-family: var(--mono);
+            color: var(--muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            margin: 2px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--muted);
+            transition: all .15s;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .nav-item .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .admin-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--surface2);
+            border-radius: 10px;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .admin-info {
+            flex: 1;
+        }
+
+        .admin-info p {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .admin-info span {
+            font-size: 11px;
+            color: var(--muted);
+            font-family: var(--mono);
+        }
+
+        /* ── MAIN ─────────────────────────────────── */
+        .main {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 64px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* ── CONTENT ──────────────────────────────── */
+        .content {
+            padding: 32px;
+            flex: 1;
+        }
+
+        /* ── STATS CARDS ──────────────────────────── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .stat-card.red::before {
+            background: var(--primary);
+        }
+
+        .stat-card.purple::before {
+            background: var(--accent);
+        }
+
+        .stat-card.green::before {
+            background: var(--success);
+        }
+
+        .stat-card.yellow::before {
+            background: var(--warning);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-family: var(--mono);
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-sub {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ── TOOLBAR ──────────────────────────────── */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0 14px;
+            height: 40px;
+            flex: 1;
+            max-width: 360px;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .search-box .material-symbols-outlined {
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        /* ── BUTTONS ──────────────────────────────── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-family: var(--sans);
+            font-size: 13px;
+            font-weight: 700;
+            transition: all .15s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary2);
+        }
+
+        .btn-ghost {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid transparent;
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+
+        .btn-success {
+            background: transparent;
+            color: var(--success);
+            border: 1px solid transparent;
+        }
+
+        .btn-success:hover {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        .btn .material-symbols-outlined {
+            font-size: 16px;
+        }
+
+        /* ── TABLE ────────────────────────────────── */
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: var(--surface2);
+        }
+
+        th {
+            padding: 12px 16px;
+            font-size: 11px;
+            font-family: var(--mono);
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 16px;
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: var(--surface2);
+        }
+
+        .td-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* ── BADGES ───────────────────────────────── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            font-family: var(--mono);
+        }
+
+        .badge-green {
+            background: rgba(16, 185, 129, .15);
+            color: var(--success);
+        }
+
+        .badge-yellow {
+            background: rgba(245, 158, 11, .15);
+            color: var(--warning);
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, .15);
+            color: var(--danger);
+        }
+
+        .badge-purple {
+            background: rgba(124, 58, 237, .15);
+            color: #a78bfa;
+        }
+
+        /* ── AVATAR ───────────────────────────────── */
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: var(--muted);
+            font-family: var(--mono);
+        }
+
+        /* ── MODAL ────────────────────────────────── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            width: 100%;
+            max-width: 540px;
+            transform: translateY(20px);
+            transition: transform .2s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            background: var(--surface2);
+            border: none;
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .15s;
+        }
+
+        .modal-close:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        /* ── FORM ─────────────────────────────────── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-grid.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            font-family: var(--mono);
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 14px;
+            outline: none;
+            transition: border .15s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+        }
+
+        .form-section-title {
+            font-size: 12px;
+            font-family: var(--mono);
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 0 4px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 4px;
+            grid-column: 1 / -1;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── TOAST ────────────────────────────────── */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all .3s;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .4);
+        }
+
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        #toast.success {
+            border-color: var(--success);
+        }
+
+        #toast.error {
+            border-color: var(--danger);
+        }
+
+        /* ── EMPTY STATE ──────────────────────────── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .empty-state .material-symbols-outlined {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* ── LOADING ──────────────────────────────── */
+        .loading-row td {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        /* ── CONFIRM ──────────────────────────────── */
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(4px);
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s;
+        }
+
+        .confirm-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .confirm-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            transform: scale(.95);
+            transition: transform .2s;
+        }
+
+        .confirm-overlay.open .confirm-box {
+            transform: scale(1);
+        }
+
+        .confirm-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, .15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .confirm-icon .material-symbols-outlined {
+            color: var(--danger);
+            font-size: 28px;
+        }
+
+        .confirm-box h4 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .confirm-box p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+
+        .confirm-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        /* ── PAGINATION ───────────────────────────── */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .page-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .page-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all .15s;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .page-btn:disabled {
+            opacity: .3;
+            cursor: not-allowed;
+        }
+
+        /* ── DETAIL DRAWER ────────────────────────── */
+        .detail-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .detail-item label {
+            font-size: 11px;
+            font-family: var(--mono);
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .detail-item p {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* ── COLOR SWATCHES ───────────────────────── */
+        .color-swatch {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-family: var(--mono);
+        }
+
+        .swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+        }
+
+        /* ── MEDIDAS TABLE ────────────────────────── */
+        .medidas-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .medida-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .medida-item label {
+            font-size: 10px;
+            font-family: var(--mono);
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .medida-item span {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .medida-item small {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ══ SIDEBAR ══════════════════════════════════════════ -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <h1>BRITASGG</h1>
+            <span>Panel Administrador</span>
+        </div>
+
+        <div class="nav-section">Módulos</div>
+        <a class="nav-item active" onclick="showSection('clientas')">
+            <span class="material-symbols-outlined">group</span> Clientas
+        </a>
+        <a class="nav-item" onclick="showSection('citas')">
+            <span class="material-symbols-outlined">calendar_month</span> Citas
+        </a>
+        <a class="nav-item" onclick="showSection('modelos')">
+            <span class="material-symbols-outlined">checkroom</span> Modelos GLB
+        </a>
+
+        <div class="nav-section">Sistema</div>
+        <a class="nav-item" href="index.html">
+            <span class="material-symbols-outlined">home</span> Ver sitio
+        </a>
+        <a class="nav-item" onclick="logoutAdmin()">
+            <span class="material-symbols-outlined">logout</span> Cerrar sesión
+        </a>
+
+        <div class="sidebar-footer">
+            <div class="admin-badge">
+                <div class="admin-avatar" id="adminInitial">A</div>
+                <div class="admin-info">
+                    <p id="adminName">Admin</p>
+                    <span>Administrador</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ══ MAIN ══════════════════════════════════════════════ -->
+    <main class="main">
+        <div class="topbar">
+            <h2 id="pageTitle">Gestión de Clientas</h2>
+            <div class="topbar-actions">
+                <span id="topbarDate" style="font-size:12px;font-family:var(--mono);color:var(--muted)"></span>
+                <button id="themeToggle" onclick="toggleTheme()"
+                    style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:all .15s;">
+                    <span class="material-symbols-outlined" id="themeIcon"
+                        style="font-size:18px;color:var(--muted)">light_mode</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- STATS -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card red">
+                    <div class="stat-label">Total clientas</div>
+                    <div class="stat-value" id="statTotal">—</div>
+                    <div class="stat-sub">registradas</div>
+                </div>
+                <div class="stat-card purple">
+                    <div class="stat-label">Con colorimetría</div>
+                    <div class="stat-value" id="statColor">—</div>
+                    <div class="stat-sub">análisis realizados</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-label">Con medidas</div>
+                    <div class="stat-value" id="statMedidas">—</div>
+                    <div class="stat-sub">perfiles completos</div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-label">Nuevas este mes</div>
+                    <div class="stat-value" id="statNuevas">—</div>
+                    <div class="stat-sub">registros recientes</div>
+                </div>
+            </div>
+
+            <!-- TOOLBAR -->
+            <div class="toolbar">
+                <div class="search-box">
+                    <span class="material-symbols-outlined">search</span>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre, email..."
+                        oninput="buscarClientas()" />
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-ghost" onclick="cargarClientas()">
+                        <span class="material-symbols-outlined">refresh</span> Actualizar
+                    </button>
+                    <button class="btn btn-primary" onclick="abrirModalNueva()">
+                        <span class="material-symbols-outlined">person_add</span> Nueva Clienta
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Clienta</th>
+                            <th>Ciudad</th>
+                            <th>Colores</th>
+                            <th>Paleta</th>
+                            <th>Medidas</th>
+                            <th>Registro</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientasBody">
+                        <tr class="loading-row">
+                            <td colspan="7">
+                                <span class="material-symbols-outlined spin">autorenew</span>
+                                Cargando clientas...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <span id="paginaInfo">0 resultados</span>
+                    <div class="page-btns" id="pageBtns"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ══ MODAL CREAR / EDITAR ══════════════════════════════ -->
+    <div class="modal-overlay" id="modalClientas">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Nueva Clienta</h3>
+                <button class="modal-close" onclick="cerrarModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="formClientas" onsubmit="guardarClientas(event)">
+                <div class="form-grid">
+                    <div class="form-section-title">Datos personales</div>
+                    <div class="form-group">
+                        <label>Nombre completo *</label>
+                        <input type="text" id="f_nombre" required placeholder="María García" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="f_email" required placeholder="maria@email.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña <span id="passHint" style="color:var(--muted)">(dejar vacío = sin
+                                cambio)</span></label>
+                        <input type="password" id="f_password" placeholder="••••••••" />
+                    </div>
+                    <div class="form-group">
+                        <label>Ciudad</label>
+                        <input type="text" id="f_ciudad" placeholder="Jamundí" />
+                    </div>
+                    <div class="form-group">
+                        <label>Edad</label>
+                        <input type="number" id="f_edad" min="15" max="99" placeholder="28" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de rostro</label>
+                        <select id="f_rostro">
+                            <option value="">Sin definir</option>
+                            <option value="ovalado">Ovalado</option>
+                            <option value="redondo">Redondo</option>
+                            <option value="cuadrado">Cuadrado</option>
+                            <option value="corazon">Corazón</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section-title">Colorimetría</div>
+                    <div class="form-group">
+                        <label>Tono de piel (hex)</label>
+                        <input type="color" id="f_piel" value="#f5c4b3" />
+                    </div>
+                    <div class="form-group">
+                        <label>Color de ojos (hex)</label>
+                        <input type="color" id="f_ojos" value="#8b6914" />
+                    </div>
+                    <div class="form-group">
+                        <label>Color de cabello (hex)</label>
+                        <input type="color" id="f_cabello" value="#4a2912" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnGuardar">
+                        <span class="material-symbols-outlined">save</span> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══ MODAL VER DETALLE ══════════════════════════════════ -->
+    <div class="modal-overlay" id="modalDetalle">
+        <div class="modal" style="max-width:620px">
+            <div class="modal-header">
+                <h3>Perfil de Clienta</h3>
+                <button class="modal-close" onclick="cerrarDetalle()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div id="detalleContenido"></div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="cerrarDetalle()">Cerrar</button>
+                <button class="btn btn-primary" id="btnEditarDesdeDetalle" onclick="">
+                    <span class="material-symbols-outlined">edit</span> Editar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ CONFIRM DELETE ══════════════════════════════════════ -->
+    <div class="confirm-overlay" id="confirmOverlay">
+        <div class="confirm-box">
+            <div class="confirm-icon">
+                <span class="material-symbols-outlined">delete_forever</span>
+            </div>
+            <h4>¿Eliminar clienta?</h4>
+            <p id="confirmMsg">Esta acción no se puede deshacer. Se eliminarán también sus medidas y datos de
+                colorimetría.</p>
+            <div class="confirm-btns">
+                <button class="btn btn-ghost" onclick="cerrarConfirm()">Cancelar</button>
+                <button class="btn btn-danger btn-primary" id="btnConfirmDelete"
+                    style="background:var(--danger);color:#fff;">
+                    <span class="material-symbols-outlined">delete</span> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ TOAST ═══════════════════════════════════════════════ -->
+    <div id="toast">
+        <span class="material-symbols-outlined" id="toastIcon">check_circle</span>
+        <span id="toastMsg">Acción completada</span>
+    </div>
+
+    <script>
+        // ── AUTH ──────────────────────────────────────────────────
+        function getToken() { return localStorage.getItem('brit_token'); }
+        function getUser() { return JSON.parse(localStorage.getItem('brit_user') || 'null'); }
+
+        function cerrarSesion() {
+            localStorage.removeItem('brit_token');
+            localStorage.removeItem('brit_user');
+            window.location.href = 'index.html';
+        }
+
+        // ── PROTECCIÓN DE RUTA ADMIN ──────────────────────────────
+        (function protegerAdmin() {
+            const token = localStorage.getItem('brit_token');
+            const userStr = localStorage.getItem('brit_user');
+            if (!token || !userStr) {
+                window.location.href = 'index.html?login=required';
+                return;
+            }
+            const user = JSON.parse(userStr);
+            const rol = (user.rol || user.role || '').toLowerCase();
+            if (rol !== 'admin') {
+                alert('❌ Acceso denegado. Solo administradores pueden entrar aquí.');
+                window.location.href = 'index.html';
+            }
+        })();
+        // ── VARIABLES GLOBALES ────────────────────────────────────
+        const API = 'http://localhost:3001/api';
+        let clientasData = [];
+        let clientasFiltradas = [];
+        let paginaActual = 1;
+        const POR_PAGINA = 10;
+        let clientaEditandoId = null;
+
+
+        function verificarAdmin() {
+            const user = getUser();
+            if (!user || user.rol !== 'admin') {
+                window.location.href = 'index.html';
+                return false;
+            }
+            document.getElementById('adminName').textContent = user.nombre?.split(' ')[0] || 'Admin';
+            document.getElementById('adminInitial').textContent = (user.nombre || 'A')[0].toUpperCase();
+            return true;
+        }
+        function logoutAdmin() {
+            if (confirm("¿Cerrar sesión de administrador?")) {
+                localStorage.removeItem('brit_token');
+                localStorage.removeItem('brit_user');
+                window.location.href = 'index.html';
+            }
+        }
+
+
+        // ── INIT ──────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            // Comentar la verificación para pruebas locales sin login:
+            // if (!verificarAdmin()) return;
+
+            const user = getUser();
+            if (user) {
+                document.getElementById('adminName').textContent = user.nombre?.split(' ')[0] || 'Admin';
+                document.getElementById('adminInitial').textContent = (user.nombre || 'A')[0].toUpperCase();
+            }
+
+            document.getElementById('topbarDate').textContent = new Date().toLocaleDateString('es-CO', {
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+            });
+
+            cargarClientas();
+            cargarStats();
+        });
+
+        // ── CARGAR STATS ──────────────────────────────────────────
+        async function cargarStats() {
+            try {
+                const res = await fetch(`${API}/admin/stats`, {
+                    headers: { 'Authorization': 'Bearer ' + getToken() }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('statTotal').textContent = data.stats.total_clientas || 0;
+                    document.getElementById('statColor').textContent = data.stats.con_colorimetria || 0;
+                    document.getElementById('statMedidas').textContent = data.stats.con_medidas || 0;
+                    document.getElementById('statNuevas').textContent = data.stats.nuevas_mes || 0;
+                }
+            } catch {
+                // Sin backend mostramos demo
+                document.getElementById('statTotal').textContent = '—';
+                document.getElementById('statColor').textContent = '—';
+                document.getElementById('statMedidas').textContent = '—';
+                document.getElementById('statNuevas').textContent = '—';
+            }
+        }
+
+        // ── CARGAR CLIENTAS ───────────────────────────────────────
+        async function cargarClientas() {
+            document.getElementById('clientasBody').innerHTML = `
+        <tr class="loading-row"><td colspan="7">
+            <span class="material-symbols-outlined spin">autorenew</span> Cargando...
+        </td></tr>`;
+
+            try {
+                const res = await fetch(`${API}/clientes/admin/clientas`, {
+                    headers: { 'Authorization': 'Bearer ' + getToken() }
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    clientasData = data.clientas || [];
+                    clientasFiltradas = [...clientasData];
+                    renderTabla();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (err) {
+                // MODO DEMO — datos de prueba si el backend no responde
+                clientasData = [
+                    { id: 1, usuario_id: 1, nombre: 'Tatiana Guerrero', email: 'tatiana@britasgg.com', ciudad: 'Jamundí', tipo_rostro: 'ovalado', color_piel: '#f5c4b3', color_ojos: '#8b6914', color_cabello: '#4a2912', tipo_paleta: 'primavera', busto: 92, cintura: 70, cadera: 98, creado_en: '2026-03-19' },
+                    { id: 2, usuario_id: 2, nombre: 'María Rodríguez', email: 'maria@gmail.com', ciudad: 'Cali', tipo_rostro: 'redondo', color_piel: '#e8a87c', color_ojos: '#178cd4', color_cabello: '#1a1a1a', tipo_paleta: 'invierno', busto: 88, cintura: 66, cadera: 94, creado_en: '2026-03-20' },
+                    { id: 3, usuario_id: 3, nombre: 'Laura Martínez', email: 'laura@email.co', ciudad: 'Palmira', tipo_rostro: 'cuadrado', color_piel: '#c68642', color_ojos: '#1d9e75', color_cabello: '#7b4a1e', tipo_paleta: 'otono', busto: 95, cintura: 75, cadera: 102, creado_en: '2026-03-21' },
+                    { id: 4, usuario_id: 4, nombre: 'Valentina Torres', email: 'valen@email.com', ciudad: 'Jamundí', tipo_rostro: 'corazon', color_piel: '#fddbb4', color_ojos: '#444444', color_cabello: '#b8860b', tipo_paleta: 'primavera', busto: null, cintura: null, cadera: null, creado_en: '2026-03-25' },
+                    { id: 5, usuario_id: 5, nombre: 'Sofía Pérez', email: 'sofia@email.com', ciudad: 'Cali', tipo_rostro: 'ovalado', color_piel: '#8d5524', color_ojos: '#e2b84a', color_cabello: '#111111', tipo_paleta: 'verano', busto: 90, cintura: 68, cadera: 96, creado_en: '2026-03-28' },
+                ];
+                clientasFiltradas = [...clientasData];
+                renderTabla();
+                toast('Modo demo activo — conecta el servidor para datos reales', 'warning');
+            }
+        }
+
+        // ── RENDER TABLA ──────────────────────────────────────────
+        function renderTabla() {
+            const tbody = document.getElementById('clientasBody');
+            const inicio = (paginaActual - 1) * POR_PAGINA;
+            const fin = inicio + POR_PAGINA;
+            const pagina = clientasFiltradas.slice(inicio, fin);
+
+            if (pagina.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7">
+            <div class="empty-state">
+                <span class="material-symbols-outlined">search_off</span>
+                No se encontraron clientas
+            </div>
+        </td></tr>`;
+                actualizarPaginacion();
+                return;
+            }
+
+            tbody.innerHTML = pagina.map(c => {
+                const inicial = (c.nombre || '?')[0].toUpperCase();
+                const tieneMedidas = c.busto && c.cintura && c.cadera;
+                const paleta = c.tipo_paleta;
+
+                return `<tr>
+            <td>
+                <div class="user-cell">
+                    <div class="user-avatar">${inicial}</div>
+                    <div>
+                        <div class="user-name">${c.nombre}</div>
+                        <div class="user-email">${c.email}</div>
+                    </div>
+                </div>
+            </td>
+            <td>${c.ciudad || '<span style="color:var(--muted)">—</span>'}</td>
+            <td>
+                <div style="display:flex;gap:4px;align-items:center">
+                    ${c.color_piel ? `<div class="swatch" style="background:${c.color_piel};width:16px;height:16px;border-radius:50%;border:2px solid var(--border)" title="Piel"></div>` : ''}
+                    ${c.color_ojos ? `<div class="swatch" style="background:${c.color_ojos};width:16px;height:16px;border-radius:50%;border:2px solid var(--border)" title="Ojos"></div>` : ''}
+                    ${c.color_cabello ? `<div class="swatch" style="background:${c.color_cabello};width:16px;height:16px;border-radius:50%;border:2px solid var(--border)" title="Cabello"></div>` : ''}
+                    ${!c.color_piel ? '<span style="color:var(--muted);font-size:12px">—</span>' : ''}
+                </div>
+            </td>
+            <td>${paleta
+                        ? `<span class="badge ${paleta === 'primavera' ? 'badge-green' : paleta === 'verano' ? 'badge-purple' : paleta === 'otono' ? 'badge-yellow' : 'badge-red'}">${paleta}</span>`
+                        : '<span style="color:var(--muted);font-size:12px">Sin análisis</span>'
+                    }</td>
+            <td>
+                ${tieneMedidas
+                        ? `<span class="badge badge-green">Completas</span>`
+                        : `<span class="badge badge-yellow">Pendientes</span>`
+                    }
+            </td>
+            <td style="font-size:12px;font-family:var(--mono);color:var(--muted)">${c.creado_en ? new Date(c.creado_en).toLocaleDateString('es-CO') : '—'
+                    }</td>
+            <td>
+                <div class="td-actions">
+                    <button class="btn btn-ghost btn-sm" onclick="verDetalle(${c.id})" title="Ver detalle">
+                        <span class="material-symbols-outlined" style="font-size:16px">visibility</span>
+                    </button>
+                    <button class="btn btn-ghost btn-sm" onclick="abrirModalEditar(${c.id})" title="Editar">
+                        <span class="material-symbols-outlined" style="font-size:16px">edit</span>
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="confirmarEliminar(${c.id}, '${c.nombre}')" title="Eliminar">
+                        <span class="material-symbols-outlined" style="font-size:16px">delete</span>
+                    </button>
+                </div>
+            </td>
+        </tr>`;
+            }).join('');
+
+            actualizarPaginacion();
+        }
+
+        function actualizarPaginacion() {
+            const total = clientasFiltradas.length;
+            const totalPaginas = Math.ceil(total / POR_PAGINA);
+            document.getElementById('paginaInfo').textContent =
+                `${total} resultado${total !== 1 ? 's' : ''} · Página ${paginaActual} de ${totalPaginas || 1}`;
+
+            const container = document.getElementById('pageBtns');
+            container.innerHTML = `
+        <button class="page-btn" onclick="cambiarPagina(${paginaActual - 1})" ${paginaActual <= 1 ? 'disabled' : ''}>‹</button>
+        ${Array.from({ length: totalPaginas }, (_, i) => i + 1).map(p =>
+                `<button class="page-btn ${p === paginaActual ? 'active' : ''}" onclick="cambiarPagina(${p})">${p}</button>`
+            ).join('')}
+        <button class="page-btn" onclick="cambiarPagina(${paginaActual + 1})" ${paginaActual >= totalPaginas ? 'disabled' : ''}>›</button>
+    `;
+        }
+
+        function cambiarPagina(p) {
+            const total = Math.ceil(clientasFiltradas.length / POR_PAGINA);
+            if (p < 1 || p > total) return;
+            paginaActual = p;
+            renderTabla();
+        }
+
+        // ── BÚSQUEDA ──────────────────────────────────────────────
+        function buscarClientas() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            clientasFiltradas = clientasData.filter(c =>
+                c.nombre?.toLowerCase().includes(q) ||
+                c.email?.toLowerCase().includes(q) ||
+                c.ciudad?.toLowerCase().includes(q)
+            );
+            paginaActual = 1;
+            renderTabla();
+        }
+
+        // ── VER DETALLE ───────────────────────────────────────────
+        function verDetalle(id) {
+            const c = clientasData.find(x => x.id === id);
+            if (!c) return;
+
+            document.getElementById('detalleContenido').innerHTML = `
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+            <div class="user-avatar" style="width:56px;height:56px;font-size:22px">${(c.nombre || '?')[0].toUpperCase()}</div>
+            <div>
+                <h4 style="font-size:20px;font-weight:800">${c.nombre}</h4>
+                <p style="font-size:13px;font-family:var(--mono);color:var(--muted)">${c.email}</p>
+            </div>
+            ${c.tipo_paleta ? `<span class="badge ${c.tipo_paleta === 'primavera' ? 'badge-green' : c.tipo_paleta === 'verano' ? 'badge-purple' : c.tipo_paleta === 'otono' ? 'badge-yellow' : 'badge-red'}" style="margin-left:auto">${c.tipo_paleta}</span>` : ''}
+        </div>
+
+        <div class="detail-info" style="margin-bottom:20px">
+            <div class="detail-item"><label>Ciudad</label><p>${c.ciudad || '—'}</p></div>
+            <div class="detail-item"><label>Edad</label><p>${c.edad ? c.edad + ' años' : '—'}</p></div>
+            <div class="detail-item"><label>Tipo de rostro</label><p>${c.tipo_rostro || '—'}</p></div>
+            <div class="detail-item"><label>Registro</label><p>${c.creado_en ? new Date(c.creado_en).toLocaleDateString('es-CO') : '—'}</p></div>
+        </div>
+
+        ${c.color_piel ? `
+        <div style="margin-bottom:20px">
+            <p style="font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Colorimetría</p>
+            <div style="display:flex;gap:16px">
+                <div class="color-swatch"><div class="swatch" style="background:${c.color_piel}"></div> Piel: ${c.color_piel}</div>
+                <div class="color-swatch"><div class="swatch" style="background:${c.color_ojos}"></div> Ojos: ${c.color_ojos}</div>
+                <div class="color-swatch"><div class="swatch" style="background:${c.color_cabello}"></div> Cabello: ${c.color_cabello}</div>
+            </div>
+        </div>` : ''}
+
+        ${c.busto ? `
+        <div>
+            <p style="font-size:11px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Medidas corporales</p>
+            <div class="medidas-grid">
+                <div class="medida-item"><label>Busto</label><span>${c.busto}</span><small>cm</small></div>
+                <div class="medida-item"><label>Cintura</label><span>${c.cintura}</span><small>cm</small></div>
+                <div class="medida-item"><label>Cadera</label><span>${c.cadera}</span><small>cm</small></div>
+                <div class="medida-item"><label>Espalda</label><span>${c.espalda || '—'}</span><small>${c.espalda ? 'cm' : ''}</small></div>
+                <div class="medida-item"><label>Talla</label><span style="font-size:14px">${c.talla || '—'}</span><small></small></div>
+            </div>
+        </div>` : '<p style="color:var(--muted);font-size:13px">Sin medidas registradas</p>'}
+    `;
+
+            document.getElementById('btnEditarDesdeDetalle').onclick = () => {
+                cerrarDetalle();
+                abrirModalEditar(id);
+            };
+
+            document.getElementById('modalDetalle').classList.add('open');
+        }
+
+        function cerrarDetalle() {
+            document.getElementById('modalDetalle').classList.remove('open');
+        }
+
+        // ── MODAL CREAR ───────────────────────────────────────────
+        function abrirModalNueva() {
+            clientaEditandoId = null;
+            document.getElementById('modalTitle').textContent = 'Nueva Clienta';
+            document.getElementById('passHint').textContent = '(requerida para nueva clienta)';
+            document.getElementById('btnGuardar').innerHTML = '<span class="material-symbols-outlined">person_add</span> Crear Clienta';
+            document.getElementById('formClientas').reset();
+            document.getElementById('f_piel').value = '#f5c4b3';
+            document.getElementById('f_ojos').value = '#8b6914';
+            document.getElementById('f_cabello').value = '#4a2912';
+            document.getElementById('modalClientas').classList.add('open');
+        }
+
+        // ── MODAL EDITAR ──────────────────────────────────────────
+        function abrirModalEditar(id) {
+            const c = clientasData.find(x => x.id === id);
+            if (!c) return;
+            clientaEditandoId = id;
+            document.getElementById('modalTitle').textContent = 'Editar Clienta';
+            document.getElementById('passHint').textContent = '(dejar vacío = sin cambio)';
+            document.getElementById('btnGuardar').innerHTML = '<span class="material-symbols-outlined">save</span> Guardar Cambios';
+
+            document.getElementById('f_nombre').value = c.nombre || '';
+            document.getElementById('f_email').value = c.email || '';
+            document.getElementById('f_password').value = '';
+            document.getElementById('f_ciudad').value = c.ciudad || '';
+            document.getElementById('f_edad').value = c.edad || '';
+            document.getElementById('f_rostro').value = c.tipo_rostro || '';
+            document.getElementById('f_piel').value = c.color_piel || '#f5c4b3';
+            document.getElementById('f_ojos').value = c.color_ojos || '#8b6914';
+            document.getElementById('f_cabello').value = c.color_cabello || '#4a2912';
+
+            document.getElementById('modalClientas').classList.add('open');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalClientas').classList.remove('open');
+        }
+
+        // ── GUARDAR (CREAR / EDITAR) ──────────────────────────────
+        async function guardarClientas(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnGuardar');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined spin">autorenew</span> Guardando...';
+
+            const payload = {
+                nombre: document.getElementById('f_nombre').value.trim(),
+                email: document.getElementById('f_email').value.trim(),
+                ciudad: document.getElementById('f_ciudad').value.trim(),
+                edad: parseInt(document.getElementById('f_edad').value) || null,
+                tipo_rostro: document.getElementById('f_rostro').value || null,
+                color_piel: document.getElementById('f_piel').value,
+                color_ojos: document.getElementById('f_ojos').value,
+                color_cabello: document.getElementById('f_cabello').value,
+            };
+
+            const password = document.getElementById('f_password').value.trim();
+            if (password) payload.password = password;
+
+            console.log("📤 Enviando a /api/clientes:", payload);
+
+            try {
+                const method = clientaEditandoId ? 'PUT' : 'POST';
+                let url = `${API}/clientes`;
+
+                if (clientaEditandoId) {
+                    url += `/${clientaEditandoId}`;
+                }
+
+                const res = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + getToken()
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log("📥 Status:", res.status);
+
+                const data = await res.json().catch(() => ({}));
+
+                if (res.ok && data.success) {
+                    toast('✅ Clienta guardada correctamente en MySQL', 'success');
+                    cerrarModal();
+                    await cargarClientas();
+                    await cargarStats();
+                } else {
+                    throw new Error(data.message || `Error ${res.status}`);
+                }
+            } catch (err) {
+                console.error("❌ Error completo:", err);
+                toast(`❌ ${err.message || 'Error al conectar con el servidor'}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span class="material-symbols-outlined">save</span> Guardar';
+            }
+        }
+
+        // ── ELIMINAR ──────────────────────────────────────────────
+        let idParaEliminar = null;
+
+        function confirmarEliminar(id, nombre) {
+            idParaEliminar = id;
+            document.getElementById('confirmMsg').textContent =
+                `¿Segura que deseas eliminar a "${nombre}"? Esta acción no se puede deshacer.`;
+            document.getElementById('btnConfirmDelete').onclick = ejecutarEliminar;
+            document.getElementById('confirmOverlay').classList.add('open');
+        }
+
+        function cerrarConfirm() {
+            document.getElementById('confirmOverlay').classList.remove('open');
+            idParaEliminar = null;
+        }
+
+        async function ejecutarEliminar() {
+            cerrarConfirm();
+            try {
+                const res = await fetch(`${API}/admin/clientas/${idParaEliminar}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + getToken() }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast('Clienta eliminada ✓', 'success');
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch {
+                // DEMO
+                clientasData = clientasData.filter(x => x.id !== idParaEliminar);
+                toast('Clienta eliminada (demo) ✓', 'success');
+            }
+            clientasFiltradas = [...clientasData];
+            renderTabla();
+            cargarStats();
+        }
+
+        // ── TOAST ─────────────────────────────────────────────────
+        function toast(msg, type = 'success') {
+            const el = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            document.getElementById('toastMsg').textContent = msg;
+            el.className = type;
+            icon.textContent = type === 'success' ? 'check_circle' : type === 'error' ? 'error' : 'warning';
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        // ── NAV ───────────────────────────────────────────────────
+        function showSection(section) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            const titles = { clientas: 'Gestión de Clientas', citas: 'Gestión de Citas', modelos: 'Catálogo de Modelos GLB' };
+            document.getElementById('pageTitle').textContent = titles[section] || section;
+            if (section !== 'clientas') {
+                toast('Módulo en desarrollo — próximamente disponible', 'warning');
+            }
+        }
+
+        // Cerrar modales con Escape
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                cerrarModal();
+                cerrarDetalle();
+                cerrarConfirm();
+            }
+        });
+        // ── TEMA OSCURO / CLARO ───────────────────────────────────
+        function toggleTheme() {
+            const root = document.documentElement;
+            const isDark = root.classList.contains('dark');
+
+            if (isDark) {
+                root.classList.remove('dark');
+                root.style.setProperty('--bg', '#f8f9fa');
+                root.style.setProperty('--surface', '#ffffff');
+                root.style.setProperty('--surface2', '#f1f3f5');
+                root.style.setProperty('--border', '#dee2e6');
+                root.style.setProperty('--text', '#111318');
+                root.style.setProperty('--muted', '#6b7280');
+                document.getElementById('themeIcon').textContent = 'dark_mode';
+                localStorage.setItem('brit_admin_theme', 'light');
+            } else {
+                root.classList.add('dark');
+                root.style.setProperty('--bg', '#0d0f14');
+                root.style.setProperty('--surface', '#151820');
+                root.style.setProperty('--surface2', '#1c2030');
+                root.style.setProperty('--border', '#252a3a');
+                root.style.setProperty('--text', '#f0f2f8');
+                root.style.setProperty('--muted', '#6b7280');
+                document.getElementById('themeIcon').textContent = 'light_mode';
+                localStorage.setItem('brit_admin_theme', 'dark');
+            }
+        }
+
+        // Cargar tema guardado al iniciar
+        (function initTheme() {
+            const saved = localStorage.getItem('brit_admin_theme') || 'dark';
+            if (saved === 'light') {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.style.setProperty('--bg', '#f8f9fa');
+                document.documentElement.style.setProperty('--surface', '#ffffff');
+                document.documentElement.style.setProperty('--surface2', '#f1f3f5');
+                document.documentElement.style.setProperty('--border', '#dee2e6');
+                document.documentElement.style.setProperty('--text', '#111318');
+                if (document.getElementById('themeIcon'))
+                    document.getElementById('themeIcon').textContent = 'dark_mode';
+            }
+        })();
+    </script>
+</body>
+
+</html>
