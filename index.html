@@ -719,16 +719,6 @@
 
         // ── Init ─────────────────────────────────────────────
         window.addEventListener('DOMContentLoaded', () => {
-            // Solo limpiar sesión si viene de fuera de la app (no navegación interna)
-            const vieneDentro = document.referrer.includes('127.0.0.1:5501') ||
-                document.referrer.includes('localhost:5501') ||
-                document.referrer.includes('192.168.');
-
-            if (!vieneDentro) {
-                localStorage.removeItem('brit_token');
-                localStorage.removeItem('brit_user');
-            }
-
             const theme = localStorage.getItem('theme') || 'light';
             document.documentElement.classList.add(theme);
             document.getElementById('themeIcon').textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
