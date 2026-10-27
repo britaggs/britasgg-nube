@@ -5,7 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const db = require('./config/db');   // ← esta es la que falta
+const db = require('./config/db');
 const fs = require('fs');
 fs.mkdirSync(path.join(__dirname, 'uploads'), { recursive: true });
 const app = express();
